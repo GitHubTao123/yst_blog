@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索区域</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+</head>
+<body>
+    <div th:fragment="searchArea">
+        <h1>搜索域</h1>
+        <div id="search_box">
+            <input type="text" placeholder="输入搜索内容" id="inp_search"/>
+            <input type="button" onclick="javascript:getSearchArea('arti');" value="搜索文章"/>
+            <input type="button" onclick="javascript:getSearchArea('user');" value="搜索用户"/>
+        </div>
+        <hr/>
+        <div hidden id="sea_result">
+            <h2>搜索结果</h2>
+            <table id="sea_users_tab">
+                <tr>
+                    <th>用户名</th>
+                    <th>地址</th>
+                </tr>
+            </table>
+
+            <table id="sea_artis_tab">
+                <tr>
+                    <th>文章编号</th>
+                    <th>文章标题</th>
+                    <th>作者</th>
+                </tr>
+            </table>
+            <hr/>
+        </div>
+    </div>
+</body>
+</html>

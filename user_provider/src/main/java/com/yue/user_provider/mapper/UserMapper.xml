@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yue.user_provider.mapper.UserMapper">
+    <select id="getUserInfoById" parameterType="int" resultMap="userInfo">
+        select user_id,user_name,user_addr from users where user_id = #{user_id}
+    </select>
+
+    <resultMap id="userInfo" type="com.yue.user_provider.entity.Users" autoMapping="true">
+        <id column="user_id" property="user_id"></id>
+        <result column="user_name" property="user_name" javaType="String"></result>
+        <result column="user_addr" property="user_addr" javaType="String"></result>
+    </resultMap>
+</mapper>

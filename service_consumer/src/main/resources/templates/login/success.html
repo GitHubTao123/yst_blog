@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>success</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+    <script>
+        $(function () {
+            setInterval(function () {
+                countdown();
+            },1000);
+        })
+        var sec = 3;
+        function countdown() {
+            sec --;
+            if(sec > 0){
+                $("#countdown_sec").html(sec);
+            }else{
+                go();
+            }
+        }
+
+        function go() {
+            window.location.href="/getArtiReturnPage?user_id=" + [[${user_id}]];
+        }
+    </script>
+</head>
+<body>
+用户注册成功，<span id="countdown_sec">3</span>秒后返回页面
+
+</body>
+</html>

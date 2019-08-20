@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+    <script>
+
+        function checkUserExist() {
+            var user_name = $("#user_name").val();
+            $.ajax({
+                url: "/checkIfExist",
+                type: "get",
+                data: {user_name: user_name},
+                success: function (result) {
+                    if(result){
+                        $("#msg").attr("hidden",false);
+                        $("#form_sub").attr("disabled",true)
+                    }else{
+                        $("#msg").attr("hidden",true);
+                        $("#form_sub").attr("disabled",false)
+                    }
+                }
+            })
+        }
+
+        function regis_btn() {
+            $("#regis_form").submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>用户注册页</h1>
+    <form id="regis_form" method="post" action="/regis_user">
+        <input type="text" th:placeholder="${(user_name == null || user_name == '')?'输入用户名':user_name}" name="user_name" id="user_name" onchange="javascript:checkUserExist();"><br/><br/>
+        <p id="msg" hidden>用户名已存在</p>
+        <input type="password" placeholder="4-8个英文字母或数字" name="user_pw" id="user_pw"><br/><br/>
+        <input type="text" placeholder="请输入地址" name="user_addr"><br/><br/>
+        <input type="button" id="form_sub" onclick="javascript:regis_btn()" value="注册">
+    </form>
+</body>
+</html>

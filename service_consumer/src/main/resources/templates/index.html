@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>yst博客首页</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.7-dist/css/bootstrap.css" />
+    <script th:inline="javascript">
+
+        $(function () {
+            if([[${msg}]]!= null){
+                $("#loginUserWarning").show();
+                $("#loginUserWarning").text([[${msg}]])
+            }
+        })
+
+        // function checkRegisPass() {
+        //     var user_name = $("#regisUserNameInput").val();
+        //     $.ajax({
+        //         url: "/checkIfExist",
+        //         type: "get",
+        //         data: {user_name: user_name},
+        //         success: function (result) {
+        //             if(result.checkIfExist){
+        //                 $("#userNameWarning").show();
+        //                 $("#passwordWarning").hide();
+        //             }else{
+        //                 if($("#regisUserInputPassword").val() == $("#checkRegisUserInputPassword").val()){
+        //                     $("#regis_modal").submit();
+        //                 }else{
+        //                     $("#userNameWarning").hide();
+        //                     $("#passwordWarning").show();
+        //                 }
+        //             }
+        //         }
+        //     })
+        // }
+
+        // function login() {
+        //     var user_form = $("#login_user_form").serialize();
+        //     alert(user_form);
+        //     $.ajax({
+        //         url: "/login",
+        //         data: $("#login_user_form").serialize(),
+        //         type: 'get',
+        //         success: function (result) {
+        //             console.log(result);
+        //             if(result.success != null){
+        //                 window.location.href="/toContPage?user_id="+result.user_id;
+        //             }else{
+        //                 alert(result.success);
+        //                 $("#loginUserWarning").show();
+        //             }
+        //         }
+        //     })
+        // }
+
+        function toRedisPage() {
+            var user_name = $("#loginUserNameInput").val();
+            window.location.href = "/toRegisPage?user_name="+user_name;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Hello, blog!</h1>
+            <p>开启你的 YST 博客</p>
+        </div>
+
+        <!-- 登录 -->
+        <form action="/login" method="get" id="login_user_form">
+            <div class="form-group">
+                <label for="loginUserNameInput">UserName</label>
+                <input type="text" class="form-control" id="loginUserNameInput" th:placeholder="${user_name == null?'UserName':user_name}" name="user_name">
+                <div class="alert alert-warning" role="alert" id="loginUserWarning" hidden></div>
+            </div>
+            <div class="form-group">
+                <label for="loginUserInputPassword1">Password</label>
+                <input type="password" class="form-control" id="loginUserInputPassword1" placeholder="Password" name="user_pw">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+        </form>
+        <br/>
+
+        <button type="button" class="btn btn-primary btn-lg" onclick="javascript:toRedisPage();">
+            还未注册？注册一个新的账号！
+        </button>
+
+        <!-- Modal -->
+        <!--<div class="modal fade" id="regis_modal" tabindex="-1" role="dialog" aria-labelledby="regis_modal_label">-->
+            <!--<div class="modal-dialog" role="document">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                        <!--<h4 class="modal-title" id="regis_modal_label">登录账号</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+                        <!--<form action="/regis_user">-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="regisUserNameInput">UserName</label>-->
+                                <!--<input type="text" class="form-control" id="regisUserNameInput" th:placeholder="${user_name == null?'UserName':UserName}" name="user_name">-->
+                                <!--<div class="alert alert-warning" role="alert" hidden id="userNameWarning">UserName Already Exist</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="regisUserInputPassword">Password</label>-->
+                                <!--<input type="password" class="form-control" id="regisUserInputPassword" placeholder="Password" name="user_pw">-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="checkRegisUserInputPassword">Enter Password Again</label>-->
+                                <!--<input type="password" class="form-control" id="checkRegisUserInputPassword" placeholder="Enter Password Again" name="user_pw">-->
+                                <!--<div class="alert alert-warning" role="alert" hidden id="passwordWarning">Password Not Same</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="regisUserInputAddr">Address</label>-->
+                                <!--<input type="text" class="form-control" id="regisUserInputAddr" placeholder="Address" name="user_addr">-->
+                            <!--</div>-->
+                            <!--<button class="btn btn-default" onclick="javascript:checkRegisPass()">Register</button>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">close</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</body>
+</html>

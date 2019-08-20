@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yue.loginprovider.mapper.LoginMapper">
+    <select id="checkIfExist" parameterType="String" resultType="int">
+        select count(*) from users where user_name = #{user_name}
+    </select>
+
+    <select id="login" parameterType="com.yue.loginprovider.entity.Users" resultMap="userInfo">
+        select user_id,user_name,user_addr from users where user_name = #{user_name} and user_pw = #{user_pw}
+    </select>
+
+    <insert id="regis_user" parameterType="com.yue.loginprovider.entity.Users" useGeneratedKeys="true" keyProperty="users.user_id" keyColumn="user_id">
+        insert into users(user_name,user_pw,user_addr) values(#{users.user_name},#{users.user_pw},#{users.user_addr})
+    </insert>
+
+    <resultMap id="userInfo" type="com.yue.loginprovider.entity.Users" autoMapping="true">
+        <id column="user_id" property="user_id" javaType="int"></id>
+        <result column="user_name" property="user_name" javaType="String"></result>
+        <result column="user_addr" property="user_addr" javaType="String"></result>
+    </resultMap>
+</mapper>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>热门精选文章</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+    <script>
+        function getArticleByArtiId(arti_id) {
+            window.location.href="/getArticleByArtiId?arti_id=" + arti_id;
+        }
+
+        function toContPage(user_id) {
+            window.location.href="/toContPage?user_id="+user_id;
+        }
+    </script>
+</head>
+<body>
+    <h1>热门精选文章</h1>
+    <div th:each="hotArti:${hotArtis}">
+        <a th:href="@{'javascript:getArticleByArtiId('+ ${hotArti.arti_id} +');'}">
+            文章编号： <input type="text" readonly name="arti_id" th:value="${hotArti.arti_id}"/><br>
+            文章标题： <input readonly type="text" name="arti_title" th:value="${hotArti.arti_title}"><br>
+        </a><br/>
+    </div><br/>
+    <div th:each="user:${users}">
+        作者 ： <a th:href="'javascript:toContPage('+${user.user_id}+');'" th:text="${user.user_name}" readonly></a><br>
+    </div>
+</body>
+</html>

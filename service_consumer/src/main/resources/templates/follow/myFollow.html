@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>myFollow</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+    <script>
+        function show(index) {
+            $("#time_"+index).attr("hidden",false);
+        }
+        function hide(index) {
+            $("#time_"+index).attr("hidden",true);
+        }
+
+        function getArticleByUserId(user_id) {
+            window.location.href="/getArticleByUserId?user_id="+user_id;
+        }
+    </script>
+</head>
+<body>
+    <h1>[[${headTitle}]]</h1>
+    <div th:each="user,userStat:${users}">
+        <a th:href="'javascript:getArticleByUserId('+${user.user_id}+');'">
+            <p th:onmouseover="'javascript:show('+${userStat.index}+');'" th:onmouseout="'javascript:hide('+${userStat.index}+');'" th:text="'用户： '+${user.user_name}"></p>
+        </a>
+    </div>
+    <div th:each="fol,folStat:${fols}">
+        <span th:id="'time_'+${folStat.index}" hidden th:text="'关注日期： '+${fol.follow_time}"></span>
+    </div>
+</body>
+</html>

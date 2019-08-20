@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文章内容页</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+    <script>
+
+        var arti_user_id = [[${arti.user_id}]];
+        var login_user_id = [[${login_user_id}]];
+        var arti_id = [[${arti.arti_id}]]
+
+        $(function () {
+            if(arti_user_id == login_user_id){
+                $("#collect_btn").hide();
+                $("#hide_user_id").val(arti_user_id);
+            }else{
+                $("#modi_btn").hide();
+                $("#del_arti").hide();
+                $.ajax({
+                    url: "/checkIfCollect",
+                    data: {login_user_id: login_user_id,arti_id: arti_id},
+                    type: 'get',
+                    success: function (result) {
+                        if(! result){
+                            $("#collect_btn").val("收藏！").attr("ifColl",false);
+                        }else{
+                            $("#collect_btn").val("取消收藏").attr("ifColl",true);
+                        }
+                    }
+                })
+            }
+        })
+
+        function changetext() {
+            $("#m_arti_title").attr("readonly",false);
+            $("#m_textarea").attr("readonly",false);
+            $("#comfirm_btn").attr("hidden",false);
+            $("#modi_btn").attr("hidden",true);
+        }
+
+        function modiArti() {
+            $("#modiArti").submit();
+        }
+
+        function delArti() {
+            window.location.href="/delArti?arti_id="+arti_id;
+        }
+
+        function toggleFollowArti() {
+            var arti_id = $("#m_arti_id").val();
+            var ifColl = $("#collect_btn").attr("ifColl");
+            $.ajax({
+                url: "/toggleFollowArti",
+                data: {user_id: login_user_id,arti_id: arti_id,ifColl: ifColl},
+                type: 'get',
+                success: function (result) {
+                    if(! result.ifColl){
+                        $("#collect_btn").val("收藏！").attr("ifColl",false);
+                    }else{
+                        $("#collect_btn").val("取消收藏").attr("ifColl",true);
+                    }
+                    $("#hide_span").show().text(result.msg);
+                    setTimeout(function () {
+                        $("#hide_span").hide();
+                    },1000);
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <h1>ARTICLE CONTENT</h1>
+    <form action="/modifyArti" method="post" id="modiArti">
+        <input type="hidden" name="user_id" id="hide_user_id" />
+        文章编号： <input type="text" readonly id="m_arti_id" name="arti_id" th:value="${arti.arti_id}"/><br><br>
+        文章标题： <input readonly type="text" id="m_arti_title" name="arti_title" th:value="${arti.arti_title}"><br><br>
+        文章内容： <textarea readonly style="height: 200px;width: 400px;" id="m_textarea" name="arti_cont">[[${arti.arti_cont}]]</textarea><br/><br>
+        <input type="button" onclick="javascript:changetext();" id="modi_btn" value="修改文章">
+        <input hidden type="button" onclick="javascript:modiArti();" id="comfirm_btn" value="保存修改">
+    </form>
+    <input type="button" value="删除该文章" onclick="javascripi:delArti();" id="del_arti"/>
+    <span hidden id="hide_span"></span><br/><br/>
+    <input type="button" onclick="javasctipt:toggleFollowArti();" id="collect_btn"/>
+</body>
+</html>

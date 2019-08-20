@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yue.followprovider.mapper.FollowMapper">
+    <select id="getMyFollow" parameterType="int" resultMap="followInfo">
+        select follow_id,follow_user_id,followed_user_id,follow_time from follow where follow_user_id = #{user_id}
+    </select>
+
+    <select id="getMyFollowed" parameterType="int" resultMap="followInfo">
+        select follow_id,follow_user_id,followed_user_id,follow_time from follow where followed_user_id = #{user_id}
+    </select>
+
+    <select id="checkIfFollow" parameterType="com.yue.followprovider.entity.Follow" resultType="int">
+        select count(*) from follow where follow_user_id = #{login_user_id} and followed_user_id = #{user_id}
+    </select>
+
+    <insert id="add_followed_user" parameterType="com.yue.followprovider.entity.Follow">
+        insert into follow (follow_user_id,followed_user_id,follow_time) values (#{login_user_id},#{user_id},#{date})
+    </insert>
+
+    <delete id="cancel_followed_user" parameterType="com.yue.followprovider.entity.Follow">
+        delete from follow where follow_user_id = #{login_user_id} and followed_user_id = #{user_id}
+    </delete>
+
+    <resultMap id="followInfo" type="com.yue.followprovider.entity.Follow" autoMapping="true">
+        <id column="follow_id" property="follow_id" javaType="int"></id>
+        <result column="follow_user_id" property="follow_user_id" javaType="int"></result>
+        <result column="followed_user_id" property="followed_user_id" javaType="int"></result>
+        <result column="follow_time" property="follow_time" javaType="java.sql.Date"></result>
+    </resultMap>
+
+    <!--<select id="getMyCollect" parameterType="int" resultType="int">-->
+        <!--select arti_id from followed_arti where follow_user_id = #{login_user_id}-->
+    <!--</select>-->
+
+    <!--<select id="checkIfCollect" parameterType="com.yue.followprovider.entity.Followed_arti" resultType="int">-->
+        <!--select count(*) from followed_arti where arti_id = #{arti_id} and follow_user_id = #{login_user_id}-->
+    <!--</select>-->
+
+
+    <!--<insert id="add_followed_arti" parameterType="com.yue.followprovider.entity.Followed_arti">-->
+        <!--insert into followed_arti(arti_id,follow_user_id) values (#{arti_id},#{user_id})-->
+    <!--</insert>-->
+
+
+    <!--<delete id="cancel_followed_arti" parameterType="com.yue.followprovider.entity.Followed_arti">-->
+        <!--delete from followed_arti where arti_id = #{arti_id} and follow_user_id = #{user_id}-->
+    <!--</delete>-->
+
+</mapper>

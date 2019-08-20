@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>head</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+</head>
+<body>
+    <div th:fragment="head">
+        <div id="login_user_div">
+            <table>
+                <tr><th>登录用户</th></tr>
+                <tr>
+                    <th>用户名</th>
+                    <td id="login_user_name_td"></td>
+                </tr>
+                <tr>
+                    <th>地址</th>
+                    <td id="login_user_addr_td"></td>
+                </tr>
+            </table>
+            <input type="button" value="返回我的主页" id="backToMyPage_btn" onclick="javascript:backToMyPage()"/>
+            <hr/>
+        </div>
+        <div id="user_div">
+            <table>
+                <tr><th>当前用户</th></tr>
+                <tr>
+                    <th>用户名</th>
+                    <td id="user_name_td"></td>
+                </tr>
+                <tr>
+                    <th>地址</th>
+                    <td id="user_addr_td"></td>
+                </tr>
+            </table>
+            <span hidden id="hide_span"></span><br/><br/>
+            <input type="button" onclick="javascript:toggleFollowUser();" id="follow_user_btn"/>
+        </div>
+        <a href="javascript:getMyFollow()" th:id="a_follow">我的关注</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:getMyFollowed()" th:id="a_fans">我的粉丝</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:getMyCollect()" th:id="a_collect">我的收藏</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="javascript:getHotArti()" th:id="a_collect">查看热门文章</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <br/><hr/>
+</div>
+</body>
+</html>

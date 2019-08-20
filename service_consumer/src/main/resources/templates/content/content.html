@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>博客主页</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+    <script th:inline="javascript">
+        var user_id = [[${user.user_id}]];
+        var login_user_id = [[${login_user.user_id}]];
+        $(function () {
+            $("#sea_artis_tab").hide();
+            $("#sea_users_tab").hide();
+
+            if(user_id != login_user_id){
+                $("#login_user_div").show();
+                $("#a_follow").text("Ta的关注");
+                $("#a_fans").text("Ta的粉丝");
+                $("#a_collect").hide();
+                $("#add_new_blog_btn").hide();
+                $("#login_user_name_td").text([[${login_user.user_name}]]);
+                $("#login_user_addr_td").text([[${login_user.user_addr}]]);
+                $.ajax({
+                    url: "/checkIfFollow",
+                    type: "get",
+                    success: function (result) {
+                        if(! result){
+                            $("#follow_user_btn").val("关注！").attr("ifFol",false);
+                        }else{
+                            $("#follow_user_btn").val("取消关注").attr("ifFol",true);
+                        }
+                    }
+                })
+            }else{
+                $("#login_user_div").hide();
+                $("#follow_user_btn").hide();
+                $("#backToMyPage_btn").hide();
+            }
+            $("#user_name_td").text([[${user.user_name}]]);
+            $("#user_addr_td").text([[${user.user_addr}]]);
+        })
+
+        function toEditArti() {
+            window.location.href="/toEditArti?user_id=" + user_id;
+        }
+
+        function getArticleByArtiId(arti_id) {
+            window.location.href="/getArticleByArtiId?arti_id=" + arti_id;
+        }
+
+        function add_cont() {
+            window.location.href="/toAddArtiPage";
+        }
+
+        function getMyFollow() {
+            window.location.href="/getMyFollow?user_id="+user_id;
+        }
+
+        function getMyFollowed() {
+            window.location.href="/getMyFollowed?user_id="+user_id;
+        }
+
+        function getMyCollect() {
+            window.location.href="/getMyCollect";
+        }
+
+        function getHotArti() {
+            window.location.href="/getHotArti";
+        }
+
+        function backToMyPage() {
+            window.location.href="/getArticleByUserId?user_id="+login_user_id;
+        }
+        
+        function toggleFollowUser() {
+            var ifFol = $("#follow_user_btn").attr("ifFol");
+            $.ajax({
+                url: "/toggleFollowUser",
+                data: {ifFol: ifFol},
+                type: 'get',
+                success: function (result) {
+                    if(! result.ifFol){
+                        $("#follow_user_btn").val("关注！");
+                        $("#follow_user_btn").attr("ifFol",false);
+                    }else{
+                        $("#follow_user_btn").val("取消关注");
+                        $("#follow_user_btn").attr("ifFol",true);
+                    }
+                    $("#hide_span").show();
+                    $("#hide_span").text(result.msg);
+                    setTimeout(function () {
+                        $("#hide_span").hide();
+                    },1000);
+                }
+            })
+        }
+
+        function getSearchArea(type) {
+            var sea_val = $("#inp_search").val();
+            $("#sea_result").show();
+            $.ajax({
+                url: "/getSearchArea",
+                data: {type: type,sea_val: sea_val},
+                type: 'get',
+                success: function (result) {
+                    if(result.type == "user"){
+                        $("#sea_artis_tab").hide ();
+                        $("#sea_users_tab").show();
+                        $("#sea_users_tab").html("<tr>\n" +
+                            "                <th>用户名</th>\n" +
+                            "                <th>地址</th>\n" +
+                            "            </tr>")
+                        $.each(result.users,function (index,user) {
+                            $("#sea_users_tab").append("<tr><td><a href='javascript:getArticleByUserId("+user.user_id+");'>"+user.user_name+"</a></td><td><a href='javascript:getArticleByUserId("+user.user_id+");'>"+user.user_addr+"</a></td></tr>")
+                        })
+                    }else{
+                        $("#sea_users_tab").hide();
+                        $("#sea_artis_tab").show();
+                        console.log(result);
+                        $("#sea_artis_tab").html("<tr>\n" +
+                            "                <th>文章编号</th>\n" +
+                            "                <th>文章标题</th>\n" +
+                            "                <th>作者</th>\n" +
+                            "            </tr>")
+                        $.each(result.lists,function (index,list) {
+                            $("#sea_artis_tab").append("<tr><td><a href='javascript:getArticleByArtiId("+list.arti.arti_id+");'>"+list.arti.arti_id+"</a></td><td><a href='javascript:getArticleByArtiId("+list.arti.arti_id+");'>"+list.arti.arti_title+"</a></td><td><a href='javascript:getArticleByUserId("+list.arti.user_id+");'>"+list.user_name+"</a></td></tr>")
+                        })
+                    }
+                }
+            })
+        }
+
+    </script>
+</head>
+<body>
+    <h1>博客主页</h1>
+    <hr/>
+    <div th:include="head/head::head"></div>
+    <!--<div th:include="search/search::searchArea"></div>-->
+    <p id="arti">ARTICLE</p>
+    <div th:each="arti:${artis}">
+        <a th:href="@{'javascript:getArticleByArtiId('+ ${arti.arti_id} +');'}">
+            文章编号： <input type="text" readonly name="arti_id" th:value="${arti.arti_id}"/><br>
+            文章标题： <input readonly type="text" name="arti_title" th:value="${arti.arti_title}"><br>
+        </a><br/>
+    </div><br/>
+    <input type="button" onclick="javascript:add_cont();" id="add_new_blog_btn" value="添加一条新的博客！"/>
+</body>
+</html>

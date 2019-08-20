@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yue.artiprovider.mapper.ArticleMapper">
+    <select id="getArticleByUserId" parameterType="int" resultMap="artiInfo">
+        select arti_id,arti_title from article where user_id = #{user_id}
+    </select>
+
+    <select id="getContent" parameterType="int" resultMap="artiInfo">
+        select arti_id,user_id,arti_title,arti_cont,watched_times from article where arti_id = #{arti_id}
+    </select>
+
+    <select id="getHotArti" resultMap="artiInfo">
+        select * from article order by watched_times desc , arti_id limit 5;
+    </select>
+
+    <select id="checkIfCollect" parameterType="com.yue.artiprovider.entity.Followed_arti" resultType="int">
+        select count(*) from followed_arti where arti_id = #{arti_id} and follow_user_id = #{login_user_id}
+    </select>
+
+    <select id="getMyCollect" parameterType="int" resultMap="followArtiInfo">
+        select arti_id,follow_user_id from followed_arti where follow_user_id = #{login_user_id}
+    </select>
+
+    <insert id="submitArti" parameterType="com.yue.artiprovider.entity.Article">
+        insert into article (user_id,arti_title,arti_cont) values
+        (#{user_id},#{arti_title},#{m_textarea})
+    </insert>
+
+    <insert id="addFollowArti" parameterType="com.yue.artiprovider.entity.Followed_arti">
+        insert into followed_arti(arti_id,follow_user_id) values (#{arti_id},#{login_user_id})
+    </insert>
+
+    <update id="modiArti" parameterType="com.yue.artiprovider.entity.Article">
+        update article set arti_title = #{arti_title},arti_cont = #{arti_cont}
+        where arti_id = #{arti_id}
+    </update>
+
+    <update id="update_watch_times" parameterType="com.yue.artiprovider.entity.Article">
+        update article set watched_times = #{watched_times} where arti_id = #{arti_id}
+    </update>
+
+    <delete id="cancelFollowArti" parameterType="com.yue.artiprovider.entity.Followed_arti">
+        delete from followed_arti where arti_id = #{arti_id} and follow_user_id = #{login_user_id}
+    </delete>
+
+    <delete id="delArti" parameterType="int">
+        delete from article where arti_id = #{arti_id}
+    </delete>
+
+    <resultMap id="artiInfo" type="com.yue.artiprovider.entity.Article" autoMapping="true">
+        <id column="arti_id" property="arti_id" javaType="int"></id>
+        <result column="user_id" property="user_id" javaType="int"></result>
+        <result column="arti_title" property="arti_title" javaType="String"></result>
+        <result column="arti_cont" property="arti_cont" javaType="String"></result>
+        <result column="watched_times" property="watched_times" javaType="int"></result>
+    </resultMap>
+
+    <resultMap id="followArtiInfo" type="com.yue.artiprovider.entity.Followed_arti" autoMapping="true">
+        <result column="arti_id" property="arti_id" javaType="int"></result>
+        <result column="follow_user_id" property="follow_user_id" javaType="int"></result>
+    </resultMap>
+</mapper>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加页面</title>
+    <script type="text/javascript" th:inline="javascript"></script>
+    <script th:src="@{jquery/jquery-3.4.1.min.js}"></script>
+    <style th:href="@{/totalCss.css}"></style>
+    <script th:src="@{bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+    <style th:href="@{bootstrap-3.3.7-dist/css/bootstrap.css}"></style>
+</head>
+<body>
+    <h1>ADD PAGE</h1>
+    <form action="/submitArti" id="subArtiForm" method="post">
+        用户ID： <input type="text" readonly name="user_id" th:value="${login_user_id}"><br/><br/>
+        文章标题： <input type="text" name="arti_title"><br/><br/>
+        文章内容： <textarea type="text" style="height: 200px;width: 400px;" name="m_textarea" id="m_textarea"></textarea>
+        <input type="submit" th:value="提交并保存">
+    </form>
+</body>
+</html>
