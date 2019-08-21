@@ -22,6 +22,10 @@
         select arti_id,follow_user_id from followed_arti where follow_user_id = #{login_user_id}
     </select>
 
+    <select id="getArtiByLike" parameterType="String" resultMap="artiInfo">
+        select * from article where arti_title like concat(concat('%',#{arti_title}),'%')
+    </select>
+
     <insert id="submitArti" parameterType="com.yue.artiprovider.entity.Article">
         insert into article (user_id,arti_title,arti_cont) values
         (#{user_id},#{arti_title},#{m_textarea})

@@ -33,6 +33,7 @@ public class LoginController {
     public String login(@RequestParam String user_name,@RequestParam String user_pw,ModelMap modelMap, HttpSession session){
         String page;
         Users user;
+//        user = restTemplate.getForObject("http://login-provider/login?user_name="+user_name+"&user_pw=" + user_pw,Users.class);
         ResponseEntity<Users> userEntity = restTemplate.getForEntity("http://login-provider/login?user_name=" + user_name + "&user_pw=" + user_pw, Users.class);
         user = userEntity.getBody();
         if(user != null){

@@ -6,6 +6,10 @@
         select user_id,user_name,user_addr from users where user_id = #{user_id}
     </select>
 
+    <select id="getSearchArea_user" parameterType="String" resultMap="userInfo">
+        select user_id,user_name,user_addr from users where user_name like concat('%',#{user_name},'%')
+    </select>
+
     <resultMap id="userInfo" type="com.yue.user_provider.entity.Users" autoMapping="true">
         <id column="user_id" property="user_id"></id>
         <result column="user_name" property="user_name" javaType="String"></result>

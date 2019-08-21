@@ -47,6 +47,10 @@
             window.location.href="/toEditArti?user_id=" + user_id;
         }
 
+        function getArticleByUserId(user_id) {
+            window.location.href="/getArticleByUserId?user_id="+user_id;
+        }
+
         function getArticleByArtiId(arti_id) {
             window.location.href="/getArticleByArtiId?arti_id=" + arti_id;
         }
@@ -106,7 +110,7 @@
                 data: {type: type,sea_val: sea_val},
                 type: 'get',
                 success: function (result) {
-                    if(result.type == "user"){
+                    if(type == "user"){
                         $("#sea_artis_tab").hide ();
                         $("#sea_users_tab").show();
                         $("#sea_users_tab").html("<tr>\n" +
@@ -119,17 +123,16 @@
                     }else{
                         $("#sea_users_tab").hide();
                         $("#sea_artis_tab").show();
-                        console.log(result);
                         $("#sea_artis_tab").html("<tr>\n" +
                             "                <th>文章编号</th>\n" +
                             "                <th>文章标题</th>\n" +
                             "                <th>作者</th>\n" +
                             "            </tr>")
                         $.each(result.lists,function (index,list) {
-                            $("#sea_artis_tab").append("<tr><td><a href='javascript:getArticleByArtiId("+list.arti.arti_id+");'>"+list.arti.arti_id+"</a></td><td><a href='javascript:getArticleByArtiId("+list.arti.arti_id+");'>"+list.arti.arti_title+"</a></td><td><a href='javascript:getArticleByUserId("+list.arti.user_id+");'>"+list.user_name+"</a></td></tr>")
+                            $("#sea_artis_tab").append("<tr><td><a href='javascript:getArticleByArtiId("+list.arti.arti_id+");'>"+list.arti.arti_id+"</a></td><td><a href='javascript:getArticleByArtiId("+list.arti.arti_id+");'>"+list.arti.arti_title+"</a></td><td><a href='javascript:getArticleByUserId("+list.user.user_id+");'>"+list.user.user_name+"</a></td></tr>")
                         })
                     }
-                }
+                 }
             })
         }
 
@@ -139,7 +142,7 @@
     <h1>博客主页</h1>
     <hr/>
     <div th:include="head/head::head"></div>
-    <!--<div th:include="search/search::searchArea"></div>-->
+    <div th:include="search/search::searchArea"></div>
     <p id="arti">ARTICLE</p>
     <div th:each="arti:${artis}">
         <a th:href="@{'javascript:getArticleByArtiId('+ ${arti.arti_id} +');'}">

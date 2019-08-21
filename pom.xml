@@ -21,6 +21,7 @@
         <module>follow-provider</module>
         <module>login-provider</module>
         <module>arti-provider</module>
+        <module>comment-provider</module>
     </modules>
 
     <properties>

@@ -27,4 +27,6 @@ public interface ArticleMapper {
     int checkIfCollect(int login_user_id, int arti_id);
 
     List<Article> getMyCollect(int user_id);
+
+    List<Article> getArtiByLike(String arti_title);
 }

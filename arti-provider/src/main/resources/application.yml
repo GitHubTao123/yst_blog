@@ -11,7 +11,7 @@ spring:
     username: root
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yst_vblog?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/yst_vblog?useSSL=false&serverTimezone=UTC
     password: 1234
 mybatis:
   configuration:
@@ -20,4 +20,5 @@ mybatis:
   mapper-locations: classpath:com.yue.user_provider.mapper/*.xml
 logging:
   level:
-    com.yue.arti_provider.mapper: debug
+    com.yue.artiprovider.mapper: debug
+#    com.yue.artiprovider.mapper

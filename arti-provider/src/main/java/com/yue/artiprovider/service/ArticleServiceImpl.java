@@ -69,4 +69,10 @@ public class ArticleServiceImpl implements ArticleService{
         List<Article> artis = articleMapper.getHotArti();
         return artis;
     }
+
+    @Override
+    public List<Article> getSearchArea_arti(String arti_title) {
+        List<Article> list = articleMapper.getArtiByLike(arti_title);
+        return list;
+    }
 }

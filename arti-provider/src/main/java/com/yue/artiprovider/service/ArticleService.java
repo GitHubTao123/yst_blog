@@ -25,4 +25,6 @@ public interface ArticleService {
     int checkIfCollect(int login_user_id, int arti_id);
 
     List<Article> getHotArti();
+
+    List<Article> getSearchArea_arti(String arti_title);
 }

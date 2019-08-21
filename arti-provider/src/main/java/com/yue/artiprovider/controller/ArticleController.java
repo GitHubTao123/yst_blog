@@ -3,6 +3,7 @@ package com.yue.artiprovider.controller;
 import com.yue.artiprovider.entity.Article;
 import com.yue.artiprovider.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,5 +74,12 @@ public class ArticleController {
     public List<Article> getHotArti(){
         List<Article> hot_artiAndUser = articleService.getHotArti();
         return hot_artiAndUser;
+    }
+
+    @RequestMapping("/getSearchArea_arti")
+    public List<Article> getSearchArea_arti(@PathParam("arti_title") String arti_title){
+        List<Article> lists = articleService.getSearchArea_arti(arti_title);
+        System.out.println(lists);
+        return lists;
     }
 }
