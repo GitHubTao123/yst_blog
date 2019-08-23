@@ -1,6 +1,7 @@
 package com.yue.service_consumer.controller;
 
 import com.yue.service_consumer.entity.Article;
+import com.yue.service_consumer.entity.Comment;
 import com.yue.service_consumer.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,9 +38,15 @@ public class ArticleController {
     @RequestMapping("/getArticleByArtiId")
     public String getArticleByArtiId(@RequestParam int arti_id, ModelMap map,HttpServletRequest request){
         Article article = restTemplate.getForObject("http://arti-provider/getArticleByArtiId?arti_id=" + arti_id, Article.class);
+        List<Map<String,Object>> commInfos = restTemplate.getForObject("http://comment-provider/getCommentByArtiId?arti_id="+arti_id, List.class);
         Users login_user = (Users)request.getSession().getAttribute("login_user");
+        Users user = (Users)request.getSession().getAttribute("user");
         map.put("login_user_id",login_user.getUser_id());
+        map.put("user_id",user.getUser_id());
         map.put("arti",article);
+        if(commInfos.size() != 0){
+            map.put("commInfos",commInfos);
+        }
         return "content/contentDetail";
     }
 

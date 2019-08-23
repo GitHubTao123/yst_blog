@@ -13,6 +13,7 @@
         var arti_user_id = [[${arti.user_id}]];
         var login_user_id = [[${login_user_id}]];
         var arti_id = [[${arti.arti_id}]]
+        var user_id = [[${user_id}]];
 
         $(function () {
             if(arti_user_id == login_user_id){
@@ -51,6 +52,10 @@
             window.location.href="/delArti?arti_id="+arti_id;
         }
 
+        function addFirstComment() {
+            $("#addCommDiv").show();
+        }
+
         function toggleFollowArti() {
             var arti_id = $("#m_arti_id").val();
             var ifColl = $("#collect_btn").attr("ifColl");
@@ -71,6 +76,19 @@
                 }
             })
         }
+
+        function commitComm() {
+            var comm_cont = $("#comm_cont").val();
+            $.ajax({
+                url: "/addComment",
+                data: {user_id: user_id , arti_id: arti_id , comm_cont: comm_cont},
+                type: 'post',
+                success: function (result) {
+                    console.log(result);
+                    $("#addCommDiv").append("<p>添加成功！</p>")
+                }
+            })
+        }
     </script>
 </head>
 <body>
@@ -80,10 +98,21 @@
         文章编号： <input type="text" readonly id="m_arti_id" name="arti_id" th:value="${arti.arti_id}"/><br><br>
         文章标题： <input readonly type="text" id="m_arti_title" name="arti_title" th:value="${arti.arti_title}"><br><br>
         文章内容： <textarea readonly style="height: 200px;width: 400px;" id="m_textarea" name="arti_cont">[[${arti.arti_cont}]]</textarea><br/><br>
+        <div th:if="${commInfos == null}"><a href="javascript:addFirstComment();">添加第一条评论！！</a></div>
+        <div hidden id="addCommDiv">
+            <input type="text" id="comm_cont" placeholder="评论内容"/>
+<!--                <input type="hidden" name="arti_id" th:value="${arti.arti_id}"/>-->
+            <input type="button" onclick="javascript:commitComm();" value="确认提交"/>
+        </div>
+        <div th:each="commInfo:${commInfos}">
+            评论者： <input readonly type="text" th:value="${commInfo.user.user_name}" />
+            评论内容： <input readonly type="text" th:value="${commInfo.comm.comm_cont}" />
+            评论时间： <input readonly type="text" th:value="${commInfo.comm.comm_time}" />
+        </div>
         <input type="button" onclick="javascript:changetext();" id="modi_btn" value="修改文章">
         <input hidden type="button" onclick="javascript:modiArti();" id="comfirm_btn" value="保存修改">
     </form>
-    <input type="button" value="删除该文章" onclick="javascripi:delArti();" id="del_arti"/>
+    <input type="button" value="删除该文章" onclick="javascript:delArti();" id="del_arti"/>
     <span hidden id="hide_span"></span><br/><br/>
     <input type="button" onclick="javasctipt:toggleFollowArti();" id="collect_btn"/>
 </body>

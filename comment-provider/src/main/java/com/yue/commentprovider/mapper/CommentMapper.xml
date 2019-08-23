@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yue.commentprovider.mapper.CommentMapper">
+
+    <select id="countComment" parameterType="int" resultType="int">
+        select count(*) from comm_arti where a_id = #{arti_id}
+    </select>
+
+    <select id="getCommentByArtiId" parameterType="int" resultMap="commInfo">
+        select comm_id,comm_cont,comm_time from comment where comm_id in (select c_id from comm_arti where a_id = #{arti_id})
+    </select>
+
+    <select id="getCommentUserInfo" parameterType="int" resultMap="userInfo">
+        select user_id,user_name,user_addr from users where user_id in (select u_id from comm_user where c_id = #{comm_id})
+    </select>
+
+    <select id="getMyComment" parameterType="int" resultMap="commInfo">
+        select comm_id,comm_cont,comm_time from comment where comm_id in (select c_id from comm_user where u_id = #{login_user_id})
+    </select>
+
+    <select id="getHotComment" resultMap="commInfo">
+        select comm_id,comm_cont,comm_time from comment where comm_id in (select c_id from comm_comm group by c_id order by count(c_id) desc)
+    </select>
+
+    <insert id="addIntoComment" parameterType="com.yue.commentprovider.entity.Comment" useGeneratedKeys="true" keyProperty="comm_id">
+        insert into comment (comm_cont,comm_time) values(
+            #{comm_cont},#{comm_time}
+        )
+    </insert>
+
+    <insert id="addIntoComm_User" parameterType="java.util.Map">
+        insert into comm_user (u_id,c_id) values (#{user_id},#{comm_id});
+    </insert>
+
+    <insert id="addIntoComm_Arti" parameterType="java.util.Map">
+        insert into comm_arti (a_id,c_id) values (#{arti_id},#{comm_id})
+    </insert>
+
+    <insert id="addIntoComm_Comm" parameterType="java.util.Map">
+        insert into comm_comm (c_id,second_c_id) values(#{comm_id},#{second_comm_id})
+    </insert>
+
+    <update id="modComment" parameterType="com.yue.commentprovider.entity.Comment">
+        update comment set comm_cont = #{comm_cont},comm_time = #{comm_time},watched_times = watched_times+1
+        where comm_id = #{comm_id}
+    </update>
+
+    <delete id="cancelComment" parameterType="int">
+        delete from comment where comm_id = #{comm_id}
+    </delete>
+
+    <delete id="cancelComm_User" parameterType="int">
+        delete from comm_user where c_id = #{comm_id}
+    </delete>
+
+    <delete id="cancelComm_Arti" parameterType="int">
+        delete from comm_arti where c_id = #{comm_id}
+    </delete>
+
+    <resultMap id="commInfo" type="com.yue.commentprovider.entity.Comment">
+        <id property="comm_id" column="comm_id" javaType="int" />
+        <result property="comm_cont" column="comm_cont" />
+        <result property="comm_time" column="comm_time" />
+    </resultMap>
+
+    <resultMap id="userInfo" type="com.yue.commentprovider.entity.Users" autoMapping="true">
+        <id column="user_id" property="user_id"></id>
+        <result column="user_name" property="user_name" javaType="String"></result>
+        <result column="user_addr" property="user_addr" javaType="String"></result>
+    </resultMap>
+</mapper>

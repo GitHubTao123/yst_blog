@@ -1,4 +1,4 @@
-package com.yue.commentprovider.entity;
+package com.yue.artiprovider.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,6 +8,7 @@ public class Comment implements Serializable {
     private int comm_id;
     private String comm_cont;
     private Date comm_time;
+    private int watched_times;
 
     @Override
     public String toString() {
@@ -15,6 +16,7 @@ public class Comment implements Serializable {
                 "comm_id=" + comm_id +
                 ", comm_cont='" + comm_cont + '\'' +
                 ", comm_time=" + comm_time +
+                ", watched_times=" + watched_times +
                 '}';
     }
 
@@ -26,6 +28,7 @@ public class Comment implements Serializable {
         this.comm_id = comm_id;
         this.comm_cont = comm_cont;
         this.comm_time = comm_time;
+        this.watched_times = watched_times;
     }
 
     public int getComm_id() {
@@ -52,4 +55,11 @@ public class Comment implements Serializable {
         this.comm_time = comm_time;
     }
 
+    public int getWatched_times() {
+        return watched_times;
+    }
+
+    public void setWatched_times(int watched_times) {
+        this.watched_times = watched_times;
+    }
 }

@@ -42,8 +42,89 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (1,1,'tom_first_text','tom5',24),(2,10,'岳赛涛的博客','岳赛涛\r\n123\r\nabc',32),(3,11,'cat\'diary','cat say today i catch a fish!\r\nno\r\nit\'s 2 !!',17),(4,10,'岳赛涛的博客2','2333klkl',5),(8,10,'yst_5','又是难过的一天，哎，嘤嘤嘤！',3),(9,10,'test in longhsine','llllllongshine',1);
+INSERT INTO `article` VALUES (1,1,'tom_first_text','tom5',24),(2,10,'岳赛涛的博客','岳赛涛\r\n123\r\nabc',73),(3,11,'cat\'diary','cat say today i catch a fish!\r\nno\r\nit\'s 2 !!',17),(4,10,'岳赛涛的博客2','2333klkl',8),(8,10,'yst_5','又是难过的一天，哎，嘤嘤嘤！',16),(9,10,'test in longhsine','llllllongshine',4);
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comm_arti`
+--
+
+DROP TABLE IF EXISTS `comm_arti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comm_arti` (
+  `a_id` int(11) DEFAULT NULL,
+  `c_id` int(11) DEFAULT NULL,
+  KEY `a_id` (`a_id`),
+  KEY `c_id` (`c_id`),
+  CONSTRAINT `comm_arti_ibfk_1` FOREIGN KEY (`a_id`) REFERENCES `article` (`arti_id`),
+  CONSTRAINT `comm_arti_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `comment` (`comm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comm_arti`
+--
+
+LOCK TABLES `comm_arti` WRITE;
+/*!40000 ALTER TABLE `comm_arti` DISABLE KEYS */;
+INSERT INTO `comm_arti` VALUES (1,5),(2,7),(2,8),(2,9),(4,10),(9,11),(8,12);
+/*!40000 ALTER TABLE `comm_arti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comm_comm`
+--
+
+DROP TABLE IF EXISTS `comm_comm`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comm_comm` (
+  `c_id` int(11) DEFAULT NULL,
+  `second_c_id` int(11) DEFAULT NULL,
+  KEY `c_id` (`c_id`),
+  KEY `second_c_id` (`second_c_id`),
+  CONSTRAINT `comm_comm_ibfk_1` FOREIGN KEY (`c_id`) REFERENCES `comment` (`comm_id`),
+  CONSTRAINT `comm_comm_ibfk_2` FOREIGN KEY (`second_c_id`) REFERENCES `comment` (`comm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comm_comm`
+--
+
+LOCK TABLES `comm_comm` WRITE;
+/*!40000 ALTER TABLE `comm_comm` DISABLE KEYS */;
+INSERT INTO `comm_comm` VALUES (2,6);
+/*!40000 ALTER TABLE `comm_comm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `comm_user`
+--
+
+DROP TABLE IF EXISTS `comm_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comm_user` (
+  `u_id` int(11) DEFAULT NULL,
+  `c_id` int(11) DEFAULT NULL,
+  KEY `u_id` (`u_id`),
+  KEY `c_id` (`c_id`),
+  CONSTRAINT `comm_user_ibfk_1` FOREIGN KEY (`u_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `comm_user_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `comment` (`comm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `comm_user`
+--
+
+LOCK TABLES `comm_user` WRITE;
+/*!40000 ALTER TABLE `comm_user` DISABLE KEYS */;
+INSERT INTO `comm_user` VALUES (1,4),(1,5),(1,2),(10,7),(10,8),(10,9),(10,10),(10,11),(10,12);
+/*!40000 ALTER TABLE `comm_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -55,17 +136,10 @@ DROP TABLE IF EXISTS `comment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comment` (
   `comm_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `arti_id` int(11) NOT NULL,
   `comm_cont` varchar(255) DEFAULT NULL,
   `comm_time` date DEFAULT NULL,
-  `watched_times` int(11) DEFAULT NULL,
-  PRIMARY KEY (`comm_id`),
-  KEY `user_id` (`user_id`),
-  KEY `arti_id` (`arti_id`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`arti_id`) REFERENCES `article` (`arti_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`comm_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,6 +148,7 @@ CREATE TABLE `comment` (
 
 LOCK TABLES `comment` WRITE;
 /*!40000 ALTER TABLE `comment` DISABLE KEYS */;
+INSERT INTO `comment` VALUES (2,'vvvvv','2019-08-22'),(3,'vvvvv','2019-08-22'),(4,'vvvvv','2019-08-22'),(5,'vvvvv','2019-08-22'),(6,'nice','2019-08-22'),(7,'very good','2019-08-23'),(8,'very good','2019-08-23'),(9,'very good','2019-08-23'),(10,'very good','2019-08-23'),(11,'very good2222','2019-08-23'),(12,'aaa','2019-08-23');
 /*!40000 ALTER TABLE `comment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-21 17:50:17
+-- Dump completed on 2019-08-23 16:52:18

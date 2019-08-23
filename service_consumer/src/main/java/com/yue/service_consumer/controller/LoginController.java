@@ -1,5 +1,7 @@
 package com.yue.service_consumer.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yue.service_consumer.entity.Article;
 import com.yue.service_consumer.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +44,17 @@ public class LoginController {
             int user_id = user.getUser_id();
             modelMap.put("user",user);
             modelMap.put("login_user",user);
-            ResponseEntity<List> forEntity = restTemplate.getForEntity("http://arti-provider/getArticleByUserId?user_id=" + user_id, List.class);
-            modelMap.put("artis",forEntity.getBody());
+            List<Map<String,Object>> infos = new ArrayList<>();
+            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id=" + user_id, List.class);
+            List<Integer> comms = new ArrayList<>();
+            for(int i = 0;i<artis.size();i++){
+                Map<String,Object> infoMap = new HashMap<>();
+                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(i).get("arti_id"), Map.class);
+                infoMap.put("arti",artis.get(i));
+                infoMap.put("count",Integer.parseInt(count.get("").toString()));
+                infos.add(infoMap);
+            }
+            modelMap.put("infos",infos);
             session.setAttribute("login_user",user);
             session.setAttribute("user",user);
             page = "content/content";
