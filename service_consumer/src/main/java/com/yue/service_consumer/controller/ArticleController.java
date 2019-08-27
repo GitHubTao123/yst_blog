@@ -1,7 +1,6 @@
 package com.yue.service_consumer.controller;
 
 import com.yue.service_consumer.entity.Article;
-import com.yue.service_consumer.entity.Comment;
 import com.yue.service_consumer.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

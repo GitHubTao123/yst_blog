@@ -1,0 +1,23 @@
+server:
+  port: 8086
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8080/eureka
+spring:
+  application:
+    name: repost-provider
+  datasource:
+    username: root
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/yst_vblog?useSSL=false&serverTimezone=UTC
+    password: 1234
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+logging:
+  level:
+    com.yue.repostprovider.mapper: debug
+#    com.yue.artiprovider.mapper

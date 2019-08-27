@@ -22,6 +22,7 @@
         <module>login-provider</module>
         <module>arti-provider</module>
         <module>comment-provider</module>
+        <module>repost-provider</module>
     </modules>
 
     <properties>

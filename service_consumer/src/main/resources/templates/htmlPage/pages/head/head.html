@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>head</title>
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+		<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../assets/css/form-elements.css">
+		<link rel="stylesheet" href="../assets/css/style.css">
+		
+	</head>
+	<body>
+		<div class=page-header>
+			<h1>YST vBlog</h1>
+		</div>
+		<div class="container">
+			
+			<nav class="navbar navbar-default">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="#">当前用户</a>
+			    </div>
+			
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+			        <li role="presentation" class="active dropdown">
+			      	<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+			      		我的blog<span class="caret"></span>
+			      	</a>
+			      	<ul class="dropdown-menu">
+			      		<li role="presentation" class="active"><a href="#">我的关注</a></li>
+			      	    <li role="presentation"><a href="#">我的粉丝</a></li>
+			      	    <li role="presentation"><a href="#">我的收藏</a></li>
+			      	</ul>
+			        </li>
+			        <li role="presentation"><a href="#">热门</a></li>
+			      </ul>
+			      <form class="navbar-form navbar-left">
+			        <div class="form-group">
+			          <input type="text" class="form-control" placeholder="搜索用户/文章">
+			        </div>
+					<button type="submit" class="btn btn-default">搜索用户</button>
+			        <button type="submit" class="btn btn-default">搜索文章</button>
+			      </form>
+			      <ul class="nav navbar-nav navbar-right">
+			        <li role="presentation" class="dropdown">
+			        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+			        	About<span class="caret"></span>
+			        </a>
+			        <ul class="dropdown-menu">
+			        	<li role="presentation" class="active"><a href="#">关于我们</a></li>
+			        	<li role="presentation"><a href="#">加入</a></li>
+			        	<li role="presentation"><a href="#">about vblog</a></li>
+			        </ul>
+			        </li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+			
+			<!--  -->
+			当前时间
+			<DIV id="time">
+				<SCRIPT>document.getElementById('time').innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());setInterval("document.getElementById('time').innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);</SCRIPT>
+			</DIV>
+		</div>
+	</body>
+	<script src="../assets/js/jquery-1.11.1.min.js"></script>
+	<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../assets/js/jquery.backstretch.min.js"></script>
+	<script src="../assets/js/scripts.js"></script>
+</html>
