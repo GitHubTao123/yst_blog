@@ -3,7 +3,7 @@ package com.yue.artiprovider.controller;
 import com.yue.artiprovider.entity.Article;
 import com.yue.artiprovider.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,14 +21,17 @@ public class ArticleController {
 
     @RequestMapping("/getArticleByUserId")
     public List<Article> getArticleByUserId(@PathParam("user_id") int user_id){
-        List<Article> artis = articleService.getArticleByUserId(user_id);
-        return artis;
+        return articleService.getArticleByUserId(user_id);
     }
 
     @RequestMapping("/getArticleByArtiId")
-    public Article toDetailCont(@RequestParam int arti_id){
-        Article arti = articleService.getContent(arti_id);
-        return arti;
+    public Article getArticleByArtiId(@RequestParam int arti_id){
+        return articleService.getArticleByArtiId(arti_id);
+    }
+
+    @GetMapping("/getHotArtiInSingleUser")
+    public List<Article> getHotArtiInSingleUser(@RequestParam("user_id")int user_id){
+        return articleService.getHotArtiInSingleUser(user_id);
     }
 
     @RequestMapping("/submitArti")
@@ -58,8 +61,7 @@ public class ArticleController {
 
     @RequestMapping("/getMyCollect")
     public List<Article> getMyCollect(@RequestParam int user_id){
-        List<Article> collections = articleService.getMyCollect(user_id);
-        return collections;
+        return articleService.getMyCollect(user_id);
     }
 
     @RequestMapping("/checkIfCollect")

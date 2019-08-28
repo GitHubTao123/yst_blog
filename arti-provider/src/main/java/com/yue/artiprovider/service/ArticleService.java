@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface ArticleService {
-    List<Article> getArticleByUserId(int id);
+    List<Article> getArticleByUserId(int user_id);
 
     void submitArti(int user_id, String arti_title, String m_textarea);
 
     void modiArti(int arti_id, String arti_title, String arti_cont);
 
-    Article getContent(int arti_id);
+    Article getArticleByArtiId(int arti_id);
 
     void delArti(int arti_id);
 
@@ -27,4 +27,6 @@ public interface ArticleService {
     List<Article> getHotArti();
 
     List<Article> getSearchArea_arti(String arti_title);
+
+    List<Article> getHotArtiInSingleUser(int user_id);
 }

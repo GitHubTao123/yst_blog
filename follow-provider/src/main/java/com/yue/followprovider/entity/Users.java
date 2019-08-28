@@ -8,6 +8,8 @@ public class Users implements Serializable {
     private String user_name;
     private String user_pw;
     private String user_addr;
+    private String user_img;
+    private String user_nickname;
 
     public int getUser_id() {
         return user_id;
@@ -41,24 +43,30 @@ public class Users implements Serializable {
         this.user_addr = user_addr;
     }
 
-    public Users(int user_id, String user_name, String user_pw, String user_addr) {
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
+    }
+
+    public String getUser_nickname() {
+        return user_nickname;
+    }
+
+    public void setUser_nickname(String user_nickname) {
+        this.user_nickname = user_nickname;
+    }
+
+    public Users(int user_id, String user_name, String user_pw, String user_addr, String user_img, String user_nickname) {
         this.user_id = user_id;
         this.user_name = user_name;
         this.user_pw = user_pw;
         this.user_addr = user_addr;
+        this.user_img = user_img;
+        this.user_nickname = user_nickname;
     }
 
-    public Users(){
-        super();
-    }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "user_id=" + user_id +
-                ", user_name='" + user_name + '\'' +
-                ", user_pw='" + user_pw + '\'' +
-                ", user_addr='" + user_addr + '\'' +
-                '}';
-    }
+    public Users(){}
 }

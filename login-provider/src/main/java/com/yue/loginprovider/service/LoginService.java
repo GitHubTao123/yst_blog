@@ -6,7 +6,7 @@ public interface LoginService {
 
     boolean checkIfExist(String user_name);
 
-    Users login(String user_name, String user_pw);
+    Users login(Users users);
 
     void regis_user(Users users);
 }

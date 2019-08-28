@@ -4,10 +4,8 @@ import com.yue.loginprovider.entity.Users;
 import com.yue.loginprovider.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +25,8 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
-    public Users login(@RequestParam String user_name, @RequestParam String user_pw){
-        Users user = loginService.login(user_name,user_pw);
+    public Users login(@RequestBody Users users){
+        Users user = loginService.login(users);
         return user;
     }
 

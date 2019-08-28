@@ -5,6 +5,7 @@ import com.yue.service_consumer.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,16 +24,24 @@ public class ArticleController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @RequestMapping("/getArticleByUserId")
-    public String getArticleByUserId(@PathParam("user_id") int user_id, ModelMap map, HttpServletRequest request){
-        List artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id=" + user_id, List.class);
-        Users login_user = (Users)request.getSession().getAttribute("login_user");
+    @GetMapping("/getArticleByUserId")
+    public String getArticleByUserId(@PathParam("user_id") int user_id,ModelMap modelMap,HttpServletRequest request){
+        Users loginUser = (Users)request.getSession().getAttribute("login_user");
         Users user = restTemplate.getForObject("http://user-provider/getUserInfo?user_id="+user_id,Users.class);
         request.getSession().setAttribute("user",user);
-        map.put("user",user);
-        map.put("login_user",login_user);
-        map.put("artis",artis);
-        return "content/content";
+        List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id=" + user_id, List.class);
+        List<Map<String,Object>> infos = new ArrayList<>();
+        for(int i = 0;i<artis.size();i++){
+            Map<String,Object> infoMap = new HashMap<>();
+            Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(i).get("arti_id"), Map.class);
+            infoMap.put("arti",artis.get(i));
+            infoMap.put("commCount",Integer.parseInt(count.get("").toString()));
+            infos.add(infoMap);
+        }
+        modelMap.put("loginUser",loginUser);
+        modelMap.put("user",user);
+        modelMap.put("infos",infos);
+        return "htmlPage/pages/content/content";
     }
 
     @RequestMapping("/getArticleByArtiId")
@@ -47,6 +57,13 @@ public class ArticleController {
             map.put("commInfos",commInfos);
         }
         return "content/contentDetail";
+    }
+
+    @ResponseBody
+    @GetMapping("/getHotArtiInSingleUser")
+    public List<Article> getHotArtiInSingleUser(@RequestParam("user_id")int user_id){
+        List<Article> articles = restTemplate.getForObject("http://arti-provider/getHotArtiInSingleUser?user_id="+user_id,List.class);
+        return articles;
     }
 
     @RequestMapping("/toAddArtiPage")
@@ -98,21 +115,26 @@ public class ArticleController {
     }
 
     @RequestMapping("/getMyCollect")
-    public String getMyCollect(ModelMap map,HttpServletRequest request){
+    public String getMyCollect(ModelMap modelMap,HttpServletRequest request){
         Users user = (Users)request.getSession().getAttribute("user");
-        Users login_user = (Users)request.getSession().getAttribute("login_user");
-        List<Map<String,Object>> collections = restTemplate.getForObject("http://arti-provider/getMyCollect?user_id=" + user.getUser_id(), List.class);
-        List<Article> artis = new ArrayList<>();
-        List<Users> users = new ArrayList<>();
+        Users loginUser = (Users)request.getSession().getAttribute("login_user");
+        List<Map<String,Object>> collections = restTemplate.getForObject("http://arti-provider/getMyCollect?user_id=" + loginUser.getUser_id(), List.class);
+        List<Map<String,Object>> infos = new ArrayList<>();
         for(int i = 0;i<collections.size();i++){
+            Map<String,Object> info = new HashMap<>();
             Article artiEnrity = restTemplate.getForObject("http://arti-provider/getArticleByArtiId?arti_id="+collections.get(i).get("arti_id"),Article.class);
-            artis.add(artiEnrity);
-            Users userEntity = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + collections.get(i).get("follow_user_id"), Users.class);
-            users.add(userEntity);
+            Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artiEnrity.getArti_id(), Map.class);
+            Users userEntity = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + artiEnrity.getUser_id(), Users.class);
+            info.put("count",Integer.parseInt(count.get("").toString()));
+            info.put("arti",artiEnrity);
+            info.put("user",userEntity);
+            infos.add(info);
         }
-        map.put("artis",artis);
-        map.put("users",users);
-        return "article/collect";
+        modelMap.put("user",user);
+        modelMap.put("loginUser",loginUser);
+        modelMap.put("infos",infos);
+        modelMap.put("headTitle","MY Collections");
+        return "htmlPage/pages/follow/artis";
     }
 
     @ResponseBody
@@ -125,17 +147,26 @@ public class ArticleController {
     }
 
     @RequestMapping("/getHotArti")
-    public String getHotArti(ModelMap map){
+    public String getHotArti(ModelMap modelMap,HttpServletRequest request){
+        Users user = (Users)request.getSession().getAttribute("user");
+        Users loginUser = (Users)request.getSession().getAttribute("login_user");
         List<Map<String,Object>> hotArtis = restTemplate.getForObject("http://arti-provider/getHotArti",List.class);
         List<Users> users = new ArrayList<>();
+        List<Map<String,Object>> infos = new ArrayList<>();
         for(int i = 0;i<hotArtis.size();i++){
-            int user_id = Integer.parseInt(hotArtis.get(i).get("user_id").toString());
-            Users userEntity = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + user_id, Users.class);
-            users.add(userEntity);
+            Map<String,Object> info = new HashMap<>();
+            Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+hotArtis.get(i).get("arti_id"), Map.class);
+            Users userEntity = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + hotArtis.get(i).get("user_id"), Users.class);
+            info.put("arti",hotArtis.get(i));
+            info.put("user",userEntity);
+            info.put("count",count);
+            infos.add(info);
         }
-        map.put("hotArtis",hotArtis);
-        map.put("users",users);
-        return "article/hotArti";
+        modelMap.put("user",user);
+        modelMap.put("loginUser",loginUser);
+        modelMap.put("infos",infos);
+        modelMap.put("headTitle","HOT Articles");
+        return "htmlPage/pages/follow/artis";
     }
 
 }

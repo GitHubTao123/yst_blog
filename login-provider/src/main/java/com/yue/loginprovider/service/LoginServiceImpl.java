@@ -20,8 +20,8 @@ public class LoginServiceImpl implements LoginService{
     }
 
     @Override
-    public Users login(String user_name, String user_pw) {
-        Users user = loginMapper.login(user_name,user_pw);
+    public Users login(Users users) {
+        Users user = loginMapper.login(users);
         return user;
     }
 

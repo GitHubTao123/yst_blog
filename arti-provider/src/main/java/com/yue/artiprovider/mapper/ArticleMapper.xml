@@ -3,11 +3,15 @@
 
 <mapper namespace="com.yue.artiprovider.mapper.ArticleMapper">
     <select id="getArticleByUserId" parameterType="int" resultMap="artiInfo">
-        select arti_id,arti_title from article where user_id = #{user_id}
+        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time from article where user_id = #{user_id}
     </select>
 
-    <select id="getContent" parameterType="int" resultMap="artiInfo">
-        select arti_id,user_id,arti_title,arti_cont,watched_times from article where arti_id = #{arti_id}
+    <select id="getHotArtiInSingleUser" parameterType="int" resultMap="artiInfo">
+        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time from article where user_id = #{user_id} order by watched_times limit 3
+    </select>
+
+    <select id="getArticleByArtiId" parameterType="int" resultMap="artiInfo">
+        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time from article where arti_id = #{arti_id}
     </select>
 
     <select id="getHotArti" resultMap="artiInfo">
@@ -58,6 +62,7 @@
         <result column="arti_title" property="arti_title" javaType="String"></result>
         <result column="arti_cont" property="arti_cont" javaType="String"></result>
         <result column="watched_times" property="watched_times" javaType="int"></result>
+        <result column="create_time" property="create_time"></result>
     </resultMap>
 
     <resultMap id="followArtiInfo" type="com.yue.artiprovider.entity.Followed_arti" autoMapping="true">

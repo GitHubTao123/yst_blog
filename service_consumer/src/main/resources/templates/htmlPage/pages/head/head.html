@@ -3,19 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<title>head</title>
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-		<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
-		<link rel="stylesheet" href="../assets/css/form-elements.css">
-		<link rel="stylesheet" href="../assets/css/style.css">
-		
 	</head>
 	<body>
-		<div class=page-header>
-			<h1>YST vBlog</h1>
-		</div>
-		<div class="container">
-			
+		<div class="container" th:fragment="head">
+			<div class=page-header>
+				<h1>YST vBlog</h1>
+			</div>
 			<nav class="navbar navbar-default">
 			  <div class="container-fluid">
 			    <!-- Brand and toggle get grouped for better mobile display -->
@@ -26,7 +19,7 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-			      <a class="navbar-brand" href="#">当前用户</a>
+					<a class="navbar-brand" th:href="@{'javascript:backToMyPage();'}" id="localUser"><img th:src="${loginUser.user_img}" alt="暂无头像"> [[${loginUser.user_name}]]</a>
 			    </div>
 			
 			    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -37,12 +30,12 @@
 			      		我的blog<span class="caret"></span>
 			      	</a>
 			      	<ul class="dropdown-menu">
-			      		<li role="presentation" class="active"><a href="#">我的关注</a></li>
-			      	    <li role="presentation"><a href="#">我的粉丝</a></li>
-			      	    <li role="presentation"><a href="#">我的收藏</a></li>
+			      		<li role="presentation" class="active"><a href="javascript:getMyFollow();">我的关注</a></li>
+			      	    <li role="presentation"><a href="javascript:getMyFollowed();">我的粉丝</a></li>
+			      	    <li role="presentation"><a href="javascript:getMyCollect();">我的收藏</a></li>
 			      	</ul>
 			        </li>
-			        <li role="presentation"><a href="#">热门</a></li>
+			        <li role="presentation"><a href="javascript:getHotArti();">热门</a></li>
 			      </ul>
 			      <form class="navbar-form navbar-left">
 			        <div class="form-group">
@@ -52,15 +45,91 @@
 			        <button type="submit" class="btn btn-default">搜索文章</button>
 			      </form>
 			      <ul class="nav navbar-nav navbar-right">
+					  <li>
+						  <!-- Large modal -->
+						  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">添加新动态</button>
+
+						  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="addArtiModal">
+							  <div class="modal-dialog modal-lg" role="document">
+								  <div class="modal-content">
+									  <div class="modal-header">
+										  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										  <h4 class="modal-title" id="addArtiModal">添加新动态</h4>
+									  </div>
+									  <div class="modal-body">
+										  <img src="..." alt="暂无图片" />
+										  <form>
+											  <div class="form-group">
+												  <label for="inputTitle">标题</label>
+												  <input type="text" class="form-control" id="inputTitle" placeholder="title">
+											  </div>
+											  <div class="form-group">
+												  <label for="inputTextarea">内容</label>
+												  <textarea style="width: 100%;height: 200px;" id="inputTextarea" placeholder="内容"></textarea>
+											  </div>
+											  <div class="form-group">
+												  <label for="pro">签到</label>
+												  <select id="pro" name="pro">
+													  <option>-请选择-</option>
+													  <option>北京市</option>
+													  <option>上海市</option>
+													  <option>天津市</option>
+													  <option>重庆市</option>
+													  <option>河北省</option>
+													  <option>山西省</option>
+													  <option>内蒙古自治区</option>
+													  <option>辽宁省</option>
+													  <option>吉林省</option>
+													  <option>黑龙江省</option>
+													  <option>江苏省</option>
+													  <option>浙江省</option>
+													  <option>安徽省</option>
+													  <option>福建省</option>
+													  <option>江西省</option>
+													  <option>山东省</option>
+													  <option>河南省</option>
+													  <option>湖北省</option>
+													  <option>湖南省</option>
+													  <option>广东省</option>
+													  <option>广西壮族自治区</option>
+													  <option>海南省</option>
+													  <option>四川省</option>
+													  <option>贵州省</option>
+													  <option>云南省</option>
+													  <option>西藏自治区</option>
+													  <option>陕西省</option>
+													  <option>甘肃省</option>
+													  <option>宁夏回族自治区</option>
+													  <option>青海省</option>
+													  <option>新疆维吾尔族自治区</option>
+													  <option>香港特别行政区</option>
+													  <option>澳门特别行政区</option>
+													  <option>台湾省</option>
+													  <option>其它</option>
+												  </select>
+												  <select id="city" name="city">
+													  <option>城市</option>
+												  </select>
+											  </div>
+										  </form>
+									  </div>
+									  <div class="modal-footer">
+										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										  <button type="button" class="btn btn-primary">Save changes</button>
+									  </div>
+								  </div>
+							  </div>
+						  </div>
+					  </li>
 			        <li role="presentation" class="dropdown">
-			        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-			        	About<span class="caret"></span>
-			        </a>
-			        <ul class="dropdown-menu">
-			        	<li role="presentation" class="active"><a href="#">关于我们</a></li>
-			        	<li role="presentation"><a href="#">加入</a></li>
-			        	<li role="presentation"><a href="#">about vblog</a></li>
-			        </ul>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+							About<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li role="presentation" class="active"><a href="#">关于我们</a></li>
+							<li role="presentation"><a href="#">加入</a></li>
+							<li role="presentation"><a href="#">about vblog</a></li>
+						</ul>
 			        </li>
 			      </ul>
 			    </div><!-- /.navbar-collapse -->
@@ -74,8 +143,4 @@
 			</DIV>
 		</div>
 	</body>
-	<script src="../assets/js/jquery-1.11.1.min.js"></script>
-	<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../assets/js/jquery.backstretch.min.js"></script>
-	<script src="../assets/js/scripts.js"></script>
 </html>

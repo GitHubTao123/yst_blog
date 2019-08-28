@@ -7,7 +7,7 @@ public interface LoginMapper {
 
     int checkIfExist(String user_name);
 
-    Users login(String user_name, String user_pw);
+    Users login(Users users);
 
     void regis_user(@Param("users") Users users);
 }

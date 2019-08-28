@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -28,23 +29,28 @@ public class LoginController {
         return "htmlPage/pages/index";
     }
 
+    /**
+     * 测试是否用户名重复
+     * Map<String,Boolean> object = restTemplate.getForObject("http://login-provider/checkIfExist?user_name=" + formUsername, Map.class);
+     *         Users users = new Users();
+     *         users.setUser_name(formUsername);
+     *         users.setUser_pw(formPassword);
+     *         if(object.get("checkIfExist")){
+     *             modelMap.put("msg","用户名已被占用");
+     *             return "htmlPage/pages/index";
+     *         }
+     * @param modelMap
+     * @param request
+     * @return
+     */
+
     @PostMapping("/login")
-    public String login(@RequestParam("form-username") String formUsername,@RequestParam("form-password") String formPassword,ModelMap modelMap, HttpServletRequest request){
-        Map<String,Boolean> object = restTemplate.getForObject("http://login-provider/checkIfExist?user_name=" + formUsername, Map.class);
-        Users users = new Users();
-        users.setUser_name(formUsername);
-        users.setUser_pw(formPassword);
-        if(object.get("checkIfExist")){
-            modelMap.put("msg","用户名已被占用");
-            return "htmlPage/pages/index";
-        }
-//        测试 restTemplate.postForEntity
-        Users loginUser = restTemplate.postForObject("http://login-provider/login", users, Users.class);
-        if(loginUser != null){
-            modelMap.put("user",loginUser);
-            modelMap.put("loginUser",loginUser);
+    public String login(@RequestParam("form-username")String userName,@RequestParam("form-password")String passWd, ModelMap modelMap, HttpServletRequest request){
+        Users users = new Users(0,userName,passWd,null,null,null);
+        users = restTemplate.postForObject("http://login-provider/login", users, Users.class);
+        if(users != null){
+            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id=" + users.getUser_id(), List.class);
             List<Map<String,Object>> infos = new ArrayList<>();
-            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id=" + loginUser.getUser_id(), List.class);
             for(int i = 0;i<artis.size();i++){
                 Map<String,Object> infoMap = new HashMap<>();
                 Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(i).get("arti_id"), Map.class);
@@ -53,9 +59,11 @@ public class LoginController {
                 infos.add(infoMap);
             }
             modelMap.put("infos",infos);
+            modelMap.put("loginUser",users);
+            modelMap.put("user",users);
             HttpSession session = request.getSession();
-            session.setAttribute("login_user",loginUser);
-            session.setAttribute("user",loginUser);
+            session.setAttribute("login_user",users);
+            session.setAttribute("user",users);
             return "htmlPage/pages/content/content";
         }else{
             modelMap.put("msg","用户名或密码错误");
@@ -84,7 +92,7 @@ public class LoginController {
 
     @RequestMapping("/regis_user")
     public String regis_user(@PathParam("user_name") String user_name, @PathParam("user_pw") String user_pw,@PathParam("user_addr") String user_addr){
-        Users users = new Users(0,user_name,user_pw,user_addr);
+        Users users = new Users(0,user_name,user_pw,user_addr,null,null);
         Map<String,Object> map = restTemplate.postForObject("http://login-provider/regis_user",users,Map.class);
         return "login/success";
     }

@@ -1,5 +1,6 @@
 package com.yue.service_consumer.controller;
 
+import com.yue.service_consumer.entity.Article;
 import com.yue.service_consumer.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,48 +25,73 @@ public class FollowController {
     private RestTemplate restTemplate;
 
     @RequestMapping("/getMyFollow")
-    public String getMyFollow(ModelMap map, HttpServletRequest request){
+    public String getMyFollow(ModelMap modelMap, HttpServletRequest request){
         Users user = (Users) request.getSession().getAttribute("user");
-        Users login_user = (Users) request.getSession().getAttribute("login_user");
-        ResponseEntity<List> folsEntity = restTemplate.getForEntity("http://follow-provider/getMyFollow?user_id=" + user.getUser_id(),List.class);
-        List<Map<String,Object>> fols = folsEntity.getBody();
-        map.put("fols",fols);
-        List<Users> users = new ArrayList<>();
+        Users loginUser = (Users) request.getSession().getAttribute("login_user");
+        List<Map<String,Object>> fols = restTemplate.getForObject("http://follow-provider/getMyFollow?user_id=" + user.getUser_id(),List.class);
+
+        List<Map<String,Object>> infos = new ArrayList<>();
+
         for(int i = 0;i<fols.size();i++){
-            ResponseEntity<Users> userEntity = restTemplate.getForEntity("http://user-provider/getUserInfo?user_id=" + fols.get(i).get("followed_user_id"), Users.class);
-            Users users1 = userEntity.getBody();
-            users.add(users1);
+            Map<String,Object> map = new HashMap<>();
+            user = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + fols.get(i).get("followed_user_id"), Users.class);
+            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getHotArtiInSingleUser?user_id="+user.getUser_id(),List.class);
+            List<Map<String,Object>> artiAndCounts = new ArrayList<>();
+            for(int j = 0;j<artis.size();j++){
+                Map<String,Object> artiAndCountMap = new HashMap<>();
+                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(j).get("arti_id"), Map.class);
+                artiAndCountMap.put("count",Integer.parseInt(count.get("").toString()));
+                artiAndCountMap.put("arti",artis.get(j));
+                artiAndCounts.add(artiAndCountMap);
+            }
+            map.put("user",user);
+            map.put("artis",artiAndCounts);
+            infos.add(map);
         }
-        map.put("users",users);
-        if(user.getUser_id() != login_user.getUser_id()){
-            map.put("headTitle","Ta的关注");
+        modelMap.put("infos",infos);
+        modelMap.put("user",user);
+        modelMap.put("loginUser",loginUser);
+        if(user.getUser_id() != loginUser.getUser_id()){
+            modelMap.put("headTitle","Ta的关注");
         }else{
-            map.put("headTitle","我的关注");
+            modelMap.put("headTitle","我的关注");
         }
-        System.out.println(map);
-        return "follow/myFollow";
+        return "htmlPage/pages/follow/users";
     }
 
     @RequestMapping("/getMyFollowed")
-    public String getMyFollowed(ModelMap map, HttpServletRequest request){
+    public String getMyFollowed(ModelMap modelMap, HttpServletRequest request){
         Users user = (Users) request.getSession().getAttribute("user");
-        Users login_user = (Users) request.getSession().getAttribute("login_user");
-        ResponseEntity<List> foledsEntity = restTemplate.getForEntity("http://follow-provider/getMyFollowed?user_id=" + user.getUser_id(),List.class);
-        List<Map<String,Object>> foleds = foledsEntity.getBody();
-        map.put("fols",foleds);
-        List<Users> users = new ArrayList<>();
-        for(int i = 0;i<foleds.size();i++){
-            ResponseEntity<Users> userEntity = restTemplate.getForEntity("http://user-provider/getUserInfo?user_id=" + foleds.get(i).get("follow_user_id"), Users.class);
-            Users users1 = userEntity.getBody();
-            users.add(users1);
+        Users loginUser = (Users) request.getSession().getAttribute("login_user");
+        List<Map<String,Object>> fols = restTemplate.getForObject("http://follow-provider/getMyFollowed?user_id=" + user.getUser_id(),List.class);
+
+        List<Map<String,Object>> infos = new ArrayList<>();
+
+        for(int i = 0;i<fols.size();i++){
+            Map<String,Object> map = new HashMap<>();
+            user = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + fols.get(i).get("follow_user_id"), Users.class);
+            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getHotArtiInSingleUser?user_id="+user.getUser_id(),List.class);
+            List<Map<String,Object>> artiAndCounts = new ArrayList<>();
+            for(int j = 0;j<artis.size();j++){
+                Map<String,Object> artiAndCountMap = new HashMap<>();
+                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(j).get("arti_id"), Map.class);
+                artiAndCountMap.put("count",Integer.parseInt(count.get("").toString()));
+                artiAndCountMap.put("arti",artis.get(j));
+                artiAndCounts.add(artiAndCountMap);
+            }
+            map.put("user",user);
+            map.put("artis",artiAndCounts);
+            infos.add(map);
         }
-        map.put("users",users);
-        if(user.getUser_id() != login_user.getUser_id()){
-            map.put("headTitle","Ta的粉丝");
+        modelMap.put("infos",infos);
+        modelMap.put("user",user);
+        modelMap.put("loginUser",loginUser);
+        if(user.getUser_id() != loginUser.getUser_id()){
+            modelMap.put("headTitle","Ta的粉丝");
         }else{
-            map.put("headTitle","我的粉丝");
+            modelMap.put("headTitle","我的粉丝");
         }
-        return "follow/myFollow";
+        return "htmlPage/pages/follow/users";
     }
 
     @ResponseBody

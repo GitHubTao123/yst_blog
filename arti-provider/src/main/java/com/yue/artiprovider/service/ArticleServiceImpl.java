@@ -14,8 +14,8 @@ public class ArticleServiceImpl implements ArticleService{
     private ArticleMapper articleMapper;
 
     @Override
-    public List<Article> getArticleByUserId(int id) {
-        List<Article> list_arti = articleMapper.getArticleByUserId(id);
+    public List<Article> getArticleByUserId(int user_id) {
+        List<Article> list_arti = articleMapper.getArticleByUserId(user_id);
         return list_arti;
     }
 
@@ -30,8 +30,8 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public Article getContent(int arti_id) {
-        Article arti = articleMapper.getContent(arti_id);
+    public Article getArticleByArtiId(int arti_id) {
+        Article arti = articleMapper.getArticleByArtiId(arti_id);
         int watched_times = arti.getWatched_times();
         articleMapper.update_watch_times(watched_times + 1,arti_id);
         return arti;
@@ -74,5 +74,10 @@ public class ArticleServiceImpl implements ArticleService{
     public List<Article> getSearchArea_arti(String arti_title) {
         List<Article> list = articleMapper.getArtiByLike(arti_title);
         return list;
+    }
+
+    @Override
+    public List<Article> getHotArtiInSingleUser(int user_id) {
+        return articleMapper.getHotArtiInSingleUser(user_id);
     }
 }

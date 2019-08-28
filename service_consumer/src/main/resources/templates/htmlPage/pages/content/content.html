@@ -3,100 +3,47 @@
 	<head>
 		<meta charset="utf-8">
 		<title>文章列表</title>
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-		<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css">
-		<link rel="stylesheet" href="../assets/css/form-elements.css">
-		<link rel="stylesheet" href="../assets/css/style.css">
-		<link rel="stylesheet" href="../../source/city.css">
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" th:href="@{assets/bootstrap/css/bootstrap.min.css}">
+		<link rel="stylesheet" th:href="@{assets/css/style.css}">
+		<link rel="stylesheet" th:href="@{assets/source/city.css}">
+		<script th:src="@{assets/js/jquery-1.11.1.min.js}"></script>
+		<script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{assets/source/city.js}"></script>
+		<script th:inline="javascript">
+			function backToMyPage() {
+				window.location.href="/getArticleByUserId?user_id="+[[${loginUser.user_id}]];
+			}
+
+			function getMyFollow() {
+				window.location.href="/getMyFollow";
+			}
+
+			function getMyFollowed() {
+				window.location.href="/getMyFollowed";
+			}
+
+			function getMyCollect() {
+				window.location.href="/getMyCollect";
+			}
+			
+			function getHotArti() {
+				window.location.href="/getHotArti";
+			}
+		</script>
 	</head>
 	<body>
 		<div class="container">
-			<iframe frameborder="none" scrolling="auto" style="width: 100%; height: 100%;" src="../head/head.html"></iframe>
+			<div th:include="htmlPage/pages/head/head::head"></div>
 			<div class="media">
-			  <div class="media-left">
-			    <a href="#">
-			      <img class="media-object" src="..." alt="暂无图片">
-			    </a>
-			  </div>
-			  
-			  <!-- Large modal -->
-			  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">添加新动态</button>
-			  
-			  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="addArtiModal">
-			    <div class="modal-dialog modal-lg" role="document">
-			      <div class="modal-content">
-			        <div class="modal-header">
-			          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			          <h4 class="modal-title" id="addArtiModal">添加新动态</h4>
-			        </div>
-			        <div class="modal-body">
-			          <image src="" alt="暂无图片"></image>
-			          <form>
-			        	  <div class="form-group">
-						  <label for="inputTitle">标题</label>
-						  <input type="text" class="form-control" id="inputTitle" placeholder="title">
-						</div>
-						<div class="form-group">
-							<label for="inputTextarea">内容</label>
-							<textarea style="width: 100%;height: 200px;" id="inputTextarea" placeholder="内容"></textarea>
-						</div>
-						<div class="form-group">
-							<label for="pro">签到</label>
-							<select id="pro" name="pro">
-							    	<option>-请选择-</option>
-							        <option>北京市</option>
-							        <option>上海市</option>
-							        <option>天津市</option>
-							        <option>重庆市</option>
-							        <option>河北省</option>
-							        <option">山西省</option>
-							        <option>内蒙古自治区</option>
-							        <option>辽宁省</option>
-							        <option>吉林省</option>
-							        <option>黑龙江省</option>
-							        <option">江苏省</option>
-							        <option">浙江省</option>
-							        <option>安徽省</option>
-							        <option">福建省</option>
-							        <option">江西省</option>
-							        <option>山东省</option>
-							        <option>河南省</option>
-							        <option>湖北省</option>
-							        <option>湖南省</option>
-							        <option>广东省</option>
-							        <option">广西壮族自治区</option>
-							        <option>海南省</option>
-							        <option>四川省</option>
-							        <option>贵州省</option>
-							        <option>云南省</option>
-							        <option>西藏自治区</option>
-							        <option">陕西省</option>
-							        <option">甘肃省</option>
-							        <option>宁夏回族自治区</option>
-							        <option>青海省</option>
-							        <option">新疆维吾尔族自治区</option>
-							        <option>香港特别行政区</option>
-							        <option>澳门特别行政区</option>
-							        <option>台湾省</option>
-							        <option>其它</option>
-							    </select>
-							    <select id="city" name="city">
-							    	<option>城市</option>
-							    </select>
-						</div>
-			          </form>
-			        </div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
-					</div>
-			      </div>
-			    </div>
-			  </div>
-			  <div class="media-body">
-			    <div>
-					<h4 class="media-heading"><a href="#" class="label label-primary">author</a><a href="#">title</a></h4>
+			    <div th:each="info:${infos}">
+				  <div class="media-left">
+					  <a href="#">
+						  <img class="media-object" src="..." alt="暂无图片">
+					  </a>
+				  </div>
+				  <div class="media-body">
+					<h4 class="media-heading"><a href="#" class="label label-primary">author</a><a href="#">[[${info.arti.arti_title}]]</a></h4>
 					<div class="dropdown">
 					  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 					    More
@@ -104,24 +51,25 @@
 					  </button>
 					  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 					    <li><a href="#">分享</a></li>
-					    <li><a href="#">收藏</a></li>
+<!--					    <li><a href="#">收藏</a></li>-->
 					    <li role="separator" class="divider"></li>
 						<li><a href="#">举报</a></li>
+					    <li>热度值： [[${info.arti.watched_times}]]</li>
 					  </ul>
 					</div>
-				</div>
-				<a href="#">body</a>
-				<div>create time</div>
-				<div class="btn-group btn-group-justified" role="group" aria-label="...">
-				  <div class="btn-group" role="group">
-				    <button type="button" class="btn btn-default">转发</button>
-				  </div>
-				  <div class="btn-group" role="group">
-				    <button type="button" class="btn btn-default">评论</button>
-				  </div>
-				  <div class="btn-group" role="group">
-				    <button type="button" class="btn btn-default">赞!</button>
-				  </div>
+					<a href="#">[[${info.arti.arti_cont}]]</a>
+					<div>创建时间： [[${info.arti.create_time}]]</div>
+					<div class="btn-group btn-group-justified" role="group" aria-label="...">
+					  <div class="btn-group" role="group">
+						<button type="button" class="btn btn-default">转发</button>
+					  </div>
+					  <div class="btn-group" role="group">
+						<button type="button" class="btn btn-default">评论 &nbsp; [[${info.commCount}]]</button>
+					  </div>
+					  <div class="btn-group" role="group">
+						<button type="button" class="btn btn-default">赞!</button>
+					  </div>
+					</div>
 				</div>
 			  </div>
 			</div>
@@ -148,9 +96,4 @@
 			</div>
 		</div>
 	</body>
-	<script src="../assets/js/jquery-1.11.1.min.js"></script>
-	<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../assets/js/jquery.backstretch.min.js"></script>
-	<script src="../assets/js/scripts.js"></script>
-	<script type="text/javascript" src="../../source/city.js"></script>
 </html>

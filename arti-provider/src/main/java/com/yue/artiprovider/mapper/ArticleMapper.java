@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface ArticleMapper {
-    List<Article> getArticleByUserId(@Param("user_id") int id);
+    List<Article> getArticleByUserId(@Param("user_id") int user_id);
 
     void submitArti(int user_id, String arti_title, String m_textarea);
 
     void modiArti(int arti_id, String arti_title, String arti_cont);
 
-    Article getContent(int arti_id);
+    Article getArticleByArtiId(int arti_id);
 
     void update_watch_times(int watched_times, int arti_id);
 
@@ -29,4 +29,6 @@ public interface ArticleMapper {
     List<Article> getMyCollect(int user_id);
 
     List<Article> getArtiByLike(String arti_title);
+
+    List<Article> getHotArtiInSingleUser(int user_id);
 }
