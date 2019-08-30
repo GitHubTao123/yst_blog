@@ -49,11 +49,11 @@ public class LoginController {
         Users users = new Users(0,userName,passWd,null,null,null);
         users = restTemplate.postForObject("http://login-provider/login", users, Users.class);
         if(users != null){
-            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id=" + users.getUser_id(), List.class);
+            List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?userId=" + users.getUser_id(), List.class);
             List<Map<String,Object>> infos = new ArrayList<>();
             for(int i = 0;i<artis.size();i++){
                 Map<String,Object> infoMap = new HashMap<>();
-                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(i).get("arti_id"), Map.class);
+                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?artiId="+artis.get(i).get("arti_id"), Map.class);
                 infoMap.put("arti",artis.get(i));
                 infoMap.put("commCount",Integer.parseInt(count.get("").toString()));
                 infos.add(infoMap);
@@ -76,7 +76,7 @@ public class LoginController {
         Users login_user = (Users)request.getSession().getAttribute("login_user");
         Users user = restTemplate.getForObject("http://user-provider/getUserInfo?user_id="+user_id,Users.class);
         request.getSession().setAttribute("user",user);
-        List artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?user_id="+user_id,List.class);
+        List artis = restTemplate.getForObject("http://arti-provider/getArticleByUserId?userId="+user_id,List.class);
         modelMap.put("artis",artis);
         modelMap.put("user",user);
         modelMap.put("login_user",login_user);

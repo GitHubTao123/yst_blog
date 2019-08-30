@@ -3,16 +3,18 @@
 
 <mapper namespace="com.yue.user_provider.mapper.UserMapper">
     <select id="getUserInfoById" parameterType="int" resultMap="userInfo">
-        select user_id,user_name,user_addr from users where user_id = #{user_id}
+        select user_id,user_name,user_addr,user_img,user_nickname from users where user_id = #{user_id}
     </select>
 
     <select id="getSearchArea_user" parameterType="String" resultMap="userInfo">
-        select user_id,user_name,user_addr from users where user_name like concat('%',#{user_name},'%')
+        select user_id,user_name,user_addr,user_img,user_nickname from users where user_name like concat('%',#{user_name},'%')
     </select>
 
     <resultMap id="userInfo" type="com.yue.user_provider.entity.Users" autoMapping="true">
         <id column="user_id" property="user_id"></id>
         <result column="user_name" property="user_name" javaType="String"></result>
         <result column="user_addr" property="user_addr" javaType="String"></result>
+        <result column="user_img" property="user_img"></result>
+        <result column="user_nickname" property="user_nickname"></result>
     </resultMap>
 </mapper>

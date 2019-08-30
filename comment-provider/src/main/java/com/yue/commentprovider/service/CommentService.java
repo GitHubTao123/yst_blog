@@ -15,11 +15,13 @@ public interface CommentService {
 
     void replyComment(Map<String, Object> map);
 
-    List<Map<String, Object>> getCommentByArtiId(int arti_id);
+    List<Map<String, Object>> getCommentByArtiId(int artiId);
 
     List<Comment> getMyComment(int login_user_id);
 
     List<Comment> getHotComment();
 
     int countComment(int arti_id);
+
+    List<Map<String,Object>> getReplyComment(int commId);
 }

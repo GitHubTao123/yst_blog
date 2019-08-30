@@ -14,14 +14,14 @@ public class ArticleServiceImpl implements ArticleService{
     private ArticleMapper articleMapper;
 
     @Override
-    public List<Article> getArticleByUserId(int user_id) {
-        List<Article> list_arti = articleMapper.getArticleByUserId(user_id);
+    public List<Article> getArticleByUserId(int userId) {
+        List<Article> list_arti = articleMapper.getArticleByUserId(userId);
         return list_arti;
     }
 
     @Override
-    public void submitArti(int user_id, String arti_title, String m_textarea) {
-        articleMapper.submitArti(user_id,arti_title,m_textarea);
+    public void submitArti(Article article) {
+        articleMapper.submitArti(article);
     }
 
     @Override
@@ -30,10 +30,10 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public Article getArticleByArtiId(int arti_id) {
-        Article arti = articleMapper.getArticleByArtiId(arti_id);
+    public Article getArticleByArtiId(int artiId) {
+        Article arti = articleMapper.getArticleByArtiId(artiId);
         int watched_times = arti.getWatched_times();
-        articleMapper.update_watch_times(watched_times + 1,arti_id);
+        articleMapper.update_watch_times(watched_times + 1,artiId);
         return arti;
     }
 

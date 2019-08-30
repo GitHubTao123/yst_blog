@@ -4,7 +4,9 @@ import com.yue.commentprovider.entity.Comment;
 import com.yue.commentprovider.entity.Users;
 import com.yue.commentprovider.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +20,8 @@ public class CommentController {
     private CommentService commentService;
 
     @RequestMapping("/countComment")
-    public int countComment(@PathParam("arti_id")int arti_id){
-        return commentService.countComment(arti_id);
+    public int countComment(@RequestParam("artiId")int artiId){
+        return commentService.countComment(artiId);
     }
 
     @RequestMapping("/addComment")
@@ -64,8 +66,8 @@ public class CommentController {
     }
 
     @RequestMapping("/getCommentByArtiId")
-    public List<Map<String,Object>> getCommentByArtiId(@PathParam("arti_id")int arti_id){
-        List<Map<String,Object>> lists = commentService.getCommentByArtiId(arti_id);
+    public List<Map<String,Object>> getCommentByArtiId(@PathParam("artiId") int artiId){
+        List<Map<String,Object>> lists = commentService.getCommentByArtiId(artiId);
         return lists;
     }
 
@@ -78,5 +80,11 @@ public class CommentController {
     @RequestMapping("/getHotComment")
     public List<Comment> getHotComment(){
         return commentService.getHotComment();
+    }
+
+    @GetMapping("/getReplyComment")
+    public List<Map<String,Object>> getReplyComment(@RequestParam int commId){
+        List<Map<String,Object>> lists = commentService.getReplyComment(commId);
+        return lists;
     }
 }

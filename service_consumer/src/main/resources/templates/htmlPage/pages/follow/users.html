@@ -11,14 +11,6 @@
 		<script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
 		<script th:src="@{assets/source/city.js}"></script>
 		<script th:inline="javascript">
-			function backToMyPage() {
-				window.location.href="/getArticleByUserId?user_id="+[[${loginUser.user_id}]];
-			}
-			
-			function getArticleByUserId(user_id){
-				window.location.href="/getArticleByUserId?user_id="+user_id;
-			}
-			
 			function getMyFollow() {
 				window.location.href="/getMyFollow";
 			}
@@ -33,6 +25,28 @@
 			
 			function getHotArti() {
 				window.location.href="/getHotArti";
+			}
+			
+			function userAction(){
+				$("#searchFormHidden").attr("value","user");
+				$("#searchForm").submit();
+			}
+			
+			function artiAction(){
+				$("#searchFormHidden").attr("value","arti");
+				$("#searchForm").submit();
+			}
+			
+			function submitAddForm(){
+				$("#addForm").submit();
+			}
+			
+			function getArticleByArtiId(artiId){
+				window.location.href="/getArticleByArtiId?artiId="+artiId;
+			}
+			
+			function getArticleByUserId(userId){
+				window.location.href="/getArticleByUserId?userId="+userId;
 			}
 		</script>
 	</head>
@@ -49,34 +63,40 @@
 							</a>
 						</div>
 						<div class="media-body">
-							<div th:each="arti:${info.artis}">
-								标题： <a href="#">[[${arti.arti.arti_title}]]</a>
-								<div class="dropdown">
-								  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									More
-									<span class="caret"></span>
-								  </button>
-								  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-									<li><a href="#">分享</a></li>
-			<!--					    <li><a href="#">收藏</a></li>-->
-									<li role="separator" class="divider"></li>
-									<li><a href="#">举报</a></li>
-									<li>热度值： [[${arti.arti.watched_times}]]</li>
-								  </ul>
+							<div th:if="${not #lists.isEmpty(info.artis)}">
+								<div th:each="arti:${info.artis}">
+									标题： <a href="#">[[${arti.arti.arti_title}]]</a>
+									<div class="dropdown">
+									  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+										More
+										<span class="caret"></span>
+									  </button>
+									  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+										<li><a href="#">分享</a></li>
+				<!--					    <li><a href="#">收藏</a></li>-->
+										<li role="separator" class="divider"></li>
+										<li><a href="#">举报</a></li>
+										<li>热度值： [[${arti.arti.watched_times}]]</li>
+									  </ul>
+									</div>
+									<div>创建时间： [[${arti.arti.create_time}]]</div>
+									<div>location： [[${arti.arti.sign_city}]]</div>
+									<a href="#">[[${arti.arti.arti_cont}]]</a>
+									<div class="btn-group btn-group-justified" role="group" aria-label="...">
+									  <div class="btn-group" role="group">
+										<button type="button" class="btn btn-default">转发</button>
+									  </div>
+									  <div class="btn-group" role="group">
+										<button type="button" class="btn btn-default">评论 &nbsp; [[${arti.count}]]</button>
+									  </div>
+									  <div class="btn-group" role="group">
+										<button type="button" class="btn btn-default">赞!</button>
+									  </div>
+									</div>
 								</div>
-								<div>创建时间： [[${arti.arti.create_time}]]</div>
-								<a href="#">[[${arti.arti.arti_cont}]]</a>
-								<div class="btn-group btn-group-justified" role="group" aria-label="...">
-								  <div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">转发</button>
-								  </div>
-								  <div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">评论 &nbsp; [[${arti.count}]]</button>
-								  </div>
-								  <div class="btn-group" role="group">
-									<button type="button" class="btn btn-default">赞!</button>
-								  </div>
-								</div>
+							</div>
+							<div th:if="${#lists.isEmpty(info.artis)}">
+								用户暂无文章
 							</div>
 						</div>
 					</div>

@@ -3,10 +3,7 @@ package com.yue.artiprovider.controller;
 import com.yue.artiprovider.entity.Article;
 import com.yue.artiprovider.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.HashMap;
@@ -20,23 +17,25 @@ public class ArticleController {
     private ArticleService articleService;
 
     @RequestMapping("/getArticleByUserId")
-    public List<Article> getArticleByUserId(@PathParam("user_id") int user_id){
-        return articleService.getArticleByUserId(user_id);
+    public List<Article> getArticleByUserId(@PathParam("userId") int userId){
+        return articleService.getArticleByUserId(userId);
     }
 
     @RequestMapping("/getArticleByArtiId")
-    public Article getArticleByArtiId(@RequestParam int arti_id){
-        return articleService.getArticleByArtiId(arti_id);
+    public Article getArticleByArtiId(@RequestParam int artiId){
+        return articleService.getArticleByArtiId(artiId);
     }
 
     @GetMapping("/getHotArtiInSingleUser")
     public List<Article> getHotArtiInSingleUser(@RequestParam("user_id")int user_id){
-        return articleService.getHotArtiInSingleUser(user_id);
+        List<Article> artis = articleService.getHotArtiInSingleUser(user_id);
+        return artis;
     }
 
-    @RequestMapping("/submitArti")
-    public void submitArti(@RequestParam int login_user_id,@RequestParam String arti_title, @RequestParam String arti_cont){
-        articleService.submitArti(login_user_id,arti_title,arti_cont);
+//    @RequestParam int login_user_id, @RequestParam String arti_title, @RequestParam String arti_cont, @RequestParam String sign_city
+    @PutMapping("/submitArti")
+    public void submitArti(@RequestBody Article article){
+        articleService.submitArti(article);
     }
 
     @RequestMapping("/modifyArti")

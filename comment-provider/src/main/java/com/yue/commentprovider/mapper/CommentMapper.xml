@@ -8,7 +8,7 @@
     </select>
 
     <select id="getCommentByArtiId" parameterType="int" resultMap="commInfo">
-        select comm_id,comm_cont,comm_time from comment where comm_id in (select c_id from comm_arti where a_id = #{arti_id})
+        select comm_id,comm_cont,comm_time from comment where comm_id in (select c_id from comm_arti where a_id = #{artiId})
     </select>
 
     <select id="getCommentUserInfo" parameterType="int" resultMap="userInfo">
@@ -21,6 +21,10 @@
 
     <select id="getHotComment" resultMap="commInfo">
         select comm_id,comm_cont,comm_time from comment where comm_id in (select c_id from comm_comm group by c_id order by count(c_id) desc)
+    </select>
+
+    <select id="getReplyComment" parameterType="int" resultMap="commInfo">
+        select comm_id,comm_cont,comm_time from comment where comm_id in (select second_c_id from comm_comm where c_id = #{commId})
     </select>
 
     <insert id="addIntoComment" parameterType="com.yue.commentprovider.entity.Comment" useGeneratedKeys="true" keyProperty="comm_id">

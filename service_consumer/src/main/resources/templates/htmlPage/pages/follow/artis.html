@@ -11,14 +11,6 @@
 		<script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
 		<script th:src="@{assets/source/city.js}"></script>
 		<script th:inline="javascript">
-			function backToMyPage() {
-				window.location.href="/getArticleByUserId?user_id="+[[${loginUser.user_id}]];
-			}
-			
-			function getArticleByUserId(user_id){
-				window.location.href="/getArticleByUserId?user_id="+user_id;
-			}
-			
 			function getMyFollow() {
 				window.location.href="/getMyFollow";
 			}
@@ -33,6 +25,28 @@
 			
 			function getHotArti() {
 				window.location.href="/getHotArti";
+			}
+			
+			function userAction(){
+				$("#searchFormHidden").attr("value","user");
+				$("#searchForm").submit();
+			}
+			
+			function artiAction(){
+				$("#searchFormHidden").attr("value","arti");
+				$("#searchForm").submit();
+			}
+			
+			function submitAddForm(){
+				$("#addForm").submit();
+			}
+			
+			function getArticleByArtiId(artiId){
+				window.location.href="/getArticleByArtiId?artiId="+artiId;
+			}
+			
+			function getArticleByUserId(userId){
+				window.location.href="/getArticleByUserId?userId="+userId;
 			}
 		</script>
 	</head>
@@ -64,6 +78,7 @@
 							  </ul>
 							</div>
 							<div>创建时间： [[${info.arti.create_time}]]</div>
+							<div>location： [[${info.arti.sign_city}]]</div>
 							<a href="#">[[${info.arti.arti_cont}]]</a>
 							<div class="btn-group btn-group-justified" role="group" aria-label="...">
 							  <div class="btn-group" role="group">

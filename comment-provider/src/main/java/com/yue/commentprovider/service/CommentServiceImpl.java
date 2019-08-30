@@ -24,6 +24,21 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
+    public List<Map<String, Object>> getReplyComment(int commId) {
+        List<Map<String,Object>> lists = new ArrayList<>();
+        List<Comment> list = commentMapper.getReplyComment(commId);
+        for (int i = 0;i<list.size();i++){
+            Map<String,Object> info = new HashMap<>();
+            int commedId = list.get(i).getComm_id();
+            Users userInfo = commentMapper.getCommentUserInfo(commedId);
+            info.put("comm",list.get(i));
+            info.put("user",userInfo);
+            lists.add(info);
+        }
+        return lists;
+    }
+
+    @Override
     public void addComment(Map<String,Object> map) {
         Comment comment = new Comment();
         comment.setComm_cont((String)map.get("comm_cont"));
@@ -58,9 +73,9 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Map<String, Object>> getCommentByArtiId(int arti_id) {
+    public List<Map<String, Object>> getCommentByArtiId(int artiId) {
         List<Map<String, Object>> lists = new ArrayList<>();
-        List<Comment> comms = commentMapper.getCommentByArtiId(arti_id);
+        List<Comment> comms = commentMapper.getCommentByArtiId(artiId);
         for(int i = 0;i<comms.size();i++){
             Map<String,Object> map = new HashMap<>();
             int comm_id = comms.get(i).getComm_id();

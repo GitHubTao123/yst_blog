@@ -4,6 +4,15 @@
 		<meta charset="utf-8">
 		<title>文章列表</title>
 		<!-- CSS -->
+		<style type="text/css">
+			.content_text{
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			}
+		</style>
 		<link rel="stylesheet" type="text/css" th:href="@{assets/bootstrap/css/bootstrap.min.css}">
 		<link rel="stylesheet" th:href="@{assets/css/style.css}">
 		<link rel="stylesheet" th:href="@{assets/source/city.css}">
@@ -11,9 +20,6 @@
 		<script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
 		<script th:src="@{assets/source/city.js}"></script>
 		<script th:inline="javascript">
-			function backToMyPage() {
-				window.location.href="/getArticleByUserId?user_id="+[[${loginUser.user_id}]];
-			}
 
 			function getMyFollow() {
 				window.location.href="/getMyFollow";
@@ -30,6 +36,28 @@
 			function getHotArti() {
 				window.location.href="/getHotArti";
 			}
+			
+			function userAction(){
+				$("#searchFormHidden").attr("value","user");
+				$("#searchForm").submit();
+			}
+			
+			function artiAction(){
+				$("#searchFormHidden").attr("value","arti");
+				$("#searchForm").submit();
+			}
+			
+			function submitAddForm(){
+				$("#addForm").submit();
+			}
+			
+			function getArticleByArtiId(artiId){
+				window.location.href="/getArticleByArtiId?artiId="+artiId;
+			}
+			
+			function getArticleByUserId(userId){
+				window.location.href="/getArticleByUserId?userId="+userId;
+			}
 		</script>
 	</head>
 	<body>
@@ -38,12 +66,13 @@
 			<div class="media">
 			    <div th:each="info:${infos}">
 				  <div class="media-left">
-					  <a href="#">
+					  <a th:href="@{'javascript:getArticleByUserId('+${user.user_id}+');'}">
 						  <img class="media-object" src="..." alt="暂无图片">
+						  <span class="label label-default">author: [[${user.user_name}]]</span>
 					  </a>
 				  </div>
 				  <div class="media-body">
-					<h4 class="media-heading"><a href="#" class="label label-primary">author</a><a href="#">[[${info.arti.arti_title}]]</a></h4>
+					<h4 class="media-heading"><a th:href="@{'javascript:getArticleByArtiId('+${info.arti.arti_id}+');'}">[[${info.arti.arti_title}]]</a></h4>
 					<div class="dropdown">
 					  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 					    More
@@ -57,8 +86,9 @@
 					    <li>热度值： [[${info.arti.watched_times}]]</li>
 					  </ul>
 					</div>
-					<a href="#">[[${info.arti.arti_cont}]]</a>
+					<a th:href="@{'javascript:getArticleByArtiId('+${info.arti.arti_id}+');'}" class="content_text">[[${info.arti.arti_cont}]]</a>
 					<div>创建时间： [[${info.arti.create_time}]]</div>
+					<div>location： [[${info.arti.sign_city}]]</div>
 					<div class="btn-group btn-group-justified" role="group" aria-label="...">
 					  <div class="btn-group" role="group">
 						<button type="button" class="btn btn-default">转发</button>

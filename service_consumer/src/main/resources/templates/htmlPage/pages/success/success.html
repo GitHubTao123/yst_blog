@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" th:href="@{assets/bootstrap/css/bootstrap.min.css}">
+		<link rel="stylesheet" th:href="@{assets/css/style.css}">
+		<link rel="stylesheet" th:href="@{assets/source/city.css}">
+		<script th:src="@{assets/js/jquery-1.11.1.min.js}"></script>
+		<script th:src="@{assets/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{assets/source/city.js}"></script>
+		<script th:inline="javascript">
+			
+			function getMyFollow() {
+				window.location.href="/getMyFollow";
+			}
+			
+			function getMyFollowed() {
+				window.location.href="/getMyFollowed";
+			}
+			
+			function getMyCollect() {
+				window.location.href="/getMyCollect";
+			}
+			
+			function getHotArti() {
+				window.location.href="/getHotArti";
+			}
+			
+			function userAction(){
+				$("#searchFormHidden").attr("value","user");
+				$("#searchForm").submit();
+			}
+			
+			function artiAction(){
+				$("#searchFormHidden").attr("value","arti");
+				$("#searchForm").submit();
+			}
+			
+			function submitAddForm(){
+				$("#addForm").submit();
+			}
+			
+			function getArticleByArtiId(artiId){
+				window.location.href="/getArticleByArtiId?artiId="+artiId;
+			}
+			
+			function getArticleByUserId(userId){
+				window.location.href="/getArticleByUserId?userId="+userId;
+			}
+			
+			$(function () {
+				setInterval(function () {
+					countdown();
+				},1000);
+			})
+			var sec = 3;
+			function countdown() {
+				sec --;
+				if(sec > 0){
+					$("#countdown_sec").html(sec);
+				}else{
+					go();
+				}
+			}
+	
+			function go() {
+				window.location.href="/getArticleByUserId?userId=" + [[${user.user_id}]];
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div th:include="htmlPage/pages/head/head::head"></div>
+			<h4>[[${headTitle}]]</h4>
+			<span id="countdown_sec">3</span>秒后返回页面
+		</div>
+	</body>
+</html>

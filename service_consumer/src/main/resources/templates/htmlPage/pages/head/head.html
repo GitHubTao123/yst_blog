@@ -19,7 +19,7 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-					<a class="navbar-brand" th:href="@{'javascript:backToMyPage();'}" id="localUser"><img th:src="${loginUser.user_img}" alt="暂无头像"> [[${loginUser.user_name}]]</a>
+					<a class="navbar-brand" th:href="@{'javascript:getArticleByUserId('+${loginUser.user_id}+');'}" id="localUser"><img th:src="${loginUser.user_img}" alt="暂无头像"> [[${loginUser.user_name}]]</a>
 			    </div>
 			
 			    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -37,12 +37,13 @@
 			        </li>
 			        <li role="presentation"><a href="javascript:getHotArti();">热门</a></li>
 			      </ul>
-			      <form class="navbar-form navbar-left">
+			      <form action="/getSearchArea" class="navbar-form navbar-left" id="searchForm" method="post">
 			        <div class="form-group">
-			          <input type="text" class="form-control" placeholder="搜索用户/文章">
+			          <input type="text" class="form-control" name="sea_val" placeholder="搜索用户/文章">
+					  <input type="text" name="type" hidden="hidden" id="searchFormHidden"/>
 			        </div>
-					<button type="submit" class="btn btn-default">搜索用户</button>
-			        <button type="submit" class="btn btn-default">搜索文章</button>
+					<button type="submit" class="btn btn-default" onclick="javascript:userAction();">搜索用户</button>
+			        <button type="submit" class="btn btn-default" onclick="javascript:artiAction();">搜索文章</button>
 			      </form>
 			      <ul class="nav navbar-nav navbar-right">
 					  <li>
@@ -58,14 +59,14 @@
 									  </div>
 									  <div class="modal-body">
 										  <img src="..." alt="暂无图片" />
-										  <form>
+										  <form action="/submitArti" method="post" id="addForm">
 											  <div class="form-group">
 												  <label for="inputTitle">标题</label>
-												  <input type="text" class="form-control" id="inputTitle" placeholder="title">
+												  <input type="text" class="form-control" name="arti_title" id="inputTitle" placeholder="title">
 											  </div>
 											  <div class="form-group">
 												  <label for="inputTextarea">内容</label>
-												  <textarea style="width: 100%;height: 200px;" id="inputTextarea" placeholder="内容"></textarea>
+												  <textarea style="width: 100%;height: 200px;" name="m_textarea" id="inputTextarea" placeholder="内容"></textarea>
 											  </div>
 											  <div class="form-group">
 												  <label for="pro">签到</label>
@@ -115,7 +116,7 @@
 									  </div>
 									  <div class="modal-footer">
 										  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										  <button type="button" class="btn btn-primary">Save changes</button>
+										  <button type="button" class="btn btn-primary" onclick="javascript:submitAddForm();">上传新动态！</button>
 									  </div>
 								  </div>
 							  </div>

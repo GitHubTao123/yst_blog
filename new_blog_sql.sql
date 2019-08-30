@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `yst_vblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `yst_vblog`;
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: yst_vblog
@@ -30,10 +28,12 @@ CREATE TABLE `article` (
   `arti_title` varchar(20) NOT NULL,
   `arti_cont` mediumtext NOT NULL,
   `watched_times` int(11) DEFAULT NULL,
+  `create_time` bigint(20) DEFAULT NULL,
+  `sign_city` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`arti_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `article_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (1,1,'tom_first_text','tom5',24),(2,10,'岳赛涛的博客','岳赛涛\r\n123\r\nabc',73),(3,11,'cat\'diary','cat say today i catch a fish!\r\nno\r\nit\'s 2 !!',17),(4,10,'岳赛涛的博客2','2333klkl',8),(8,10,'yst_5','又是难过的一天，哎，嘤嘤嘤！',16),(9,10,'test in longhsine','llllllongshine',4);
+INSERT INTO `article` VALUES (1,1,'tom_first_text','tom5',33,NULL,NULL),(2,10,'岳赛涛的博客','岳赛涛\r\n123\r\nabc',97,NULL,NULL),(3,11,'cat\'diary','cat say today i catch a fish!\r\nno\r\nit\'s 2 !!',26,NULL,NULL),(4,10,'岳赛涛的博客2','2333klkl',10,NULL,NULL),(8,10,'yst_5','又是难过的一天，哎，嘤嘤嘤！',16,NULL,NULL),(9,10,'test in longhsine','llllllongshine',5,NULL,NULL),(10,10,'岳小桃','yyy,QAQ',NULL,NULL,'辽宁省沈阳'),(11,10,'岳小桃1','TAT',1,NULL,'广西壮族自治区南宁'),(12,10,'岳小桃1','TAT',NULL,NULL,'广西壮族自治区南宁'),(13,10,'岳小桃1','TAT',NULL,NULL,'广西壮族自治区南宁'),(14,10,'岳小桃555','wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !wo tai nan le !',3,NULL,'湖北省武汉'),(15,10,'岳小桃dd','dd',NULL,NULL,'河南省郑州'),(16,10,'岳小桃2333','1111111111111111111122222222222222222222222\r\nso sos soos sosos sososos soooooos soooos sosososososos sooos ssosososossososo so sos soos sosos sososos soooooos soooos sosososososos sooos ssosososossososo so sos soos sosos sososos soooooos soooos sosososososos sooos ssosososossososo so sos soos sosos sososos soooooos soooos sosososososos sooos ssosososossososo so sos soos sosos sososos soooooos soooos sosososososos sooos ssosososossososo so sos soos sosos sososos soooooos soooos sosososososos sooos ssosososossososo',2,1567151882678,'广东省广州');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,6 +212,83 @@ INSERT INTO `followed_arti` VALUES (76,3,10),(78,1,10);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `rep_comm`
+--
+
+DROP TABLE IF EXISTS `rep_comm`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rep_comm` (
+  `r_id` int(11) NOT NULL,
+  `c_id` int(11) NOT NULL,
+  KEY `r_id` (`r_id`),
+  KEY `c_id` (`c_id`),
+  CONSTRAINT `rep_comm_ibfk_1` FOREIGN KEY (`r_id`) REFERENCES `repost` (`id`),
+  CONSTRAINT `rep_comm_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `comment` (`comm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_comm`
+--
+
+LOCK TABLES `rep_comm` WRITE;
+/*!40000 ALTER TABLE `rep_comm` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_comm` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rep_user`
+--
+
+DROP TABLE IF EXISTS `rep_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rep_user` (
+  `r_id` int(11) NOT NULL,
+  `u_id` int(11) NOT NULL,
+  KEY `r_id` (`r_id`),
+  KEY `u_id` (`u_id`),
+  CONSTRAINT `rep_user_ibfk_1` FOREIGN KEY (`r_id`) REFERENCES `repost` (`id`),
+  CONSTRAINT `rep_user_ibfk_2` FOREIGN KEY (`u_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rep_user`
+--
+
+LOCK TABLES `rep_user` WRITE;
+/*!40000 ALTER TABLE `rep_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rep_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `repost`
+--
+
+DROP TABLE IF EXISTS `repost`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `repost` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rep_cont` varchar(255) DEFAULT '转发YST博客',
+  `rep_time` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `repost`
+--
+
+LOCK TABLES `repost` WRITE;
+/*!40000 ALTER TABLE `repost` DISABLE KEYS */;
+INSERT INTO `repost` VALUES (1,'test_repost',1566809792462),(2,'test_repost',1566809860243),(3,NULL,1566811348318),(4,NULL,1566811435494),(5,'test_repost222',1566811450471),(6,'test_repost222',1566811468329),(7,'test_repost222',1566811569811),(8,'test_repost222',1566811607573),(9,'test_repost222',1566811986222),(10,'test_repost222',1566812718913),(11,'test_repost222',1566812814098);
+/*!40000 ALTER TABLE `repost` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -223,6 +300,8 @@ CREATE TABLE `users` (
   `user_name` varchar(10) NOT NULL,
   `user_pw` varchar(10) NOT NULL,
   `user_addr` varchar(10) NOT NULL,
+  `user_img` varchar(45) DEFAULT NULL,
+  `user_nickname` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -233,7 +312,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'tom','123456','fushun'),(2,'kate','1234','shenyang'),(3,'lily','12345','beijing'),(5,'a','1234','大连'),(6,'yst','123','hangzhou'),(7,'yst2','1234','11'),(8,'yst3','1','1'),(9,'ystl','12','12'),(10,'岳赛涛','1234','杭州'),(11,'cat','1234','cat');
+INSERT INTO `users` VALUES (1,'tom','123456','fushun',NULL,NULL),(2,'kate','1234','shenyang',NULL,NULL),(3,'lily','12345','beijing',NULL,NULL),(5,'a','1234','大连',NULL,NULL),(6,'yst','123','hangzhou',NULL,NULL),(7,'yst2','1234','11',NULL,NULL),(8,'yst3','1','1',NULL,NULL),(9,'ystl','12','12',NULL,NULL),(10,'岳赛涛','1234','杭州',NULL,NULL),(11,'cat','1234','cat',NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -246,4 +325,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-23 16:52:18
+-- Dump completed on 2019-08-30 18:05:12

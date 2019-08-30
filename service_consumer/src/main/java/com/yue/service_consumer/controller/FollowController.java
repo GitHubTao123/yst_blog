@@ -1,9 +1,7 @@
 package com.yue.service_consumer.controller;
 
-import com.yue.service_consumer.entity.Article;
 import com.yue.service_consumer.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +22,7 @@ public class FollowController {
     private RestTemplate restTemplate;
 
     @RequestMapping("/getMyFollow")
-    public String getMyFollow(ModelMap modelMap, HttpServletRequest request){
+    public String getMyFollow(ModelMap modelMap,HttpServletRequest request){
         Users user = (Users) request.getSession().getAttribute("user");
         Users loginUser = (Users) request.getSession().getAttribute("login_user");
         List<Map<String,Object>> fols = restTemplate.getForObject("http://follow-provider/getMyFollow?user_id=" + user.getUser_id(),List.class);
@@ -33,20 +30,20 @@ public class FollowController {
         List<Map<String,Object>> infos = new ArrayList<>();
 
         for(int i = 0;i<fols.size();i++){
-            Map<String,Object> map = new HashMap<>();
+            Map<String,Object> info = new HashMap<>();
             user = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + fols.get(i).get("followed_user_id"), Users.class);
             List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getHotArtiInSingleUser?user_id="+user.getUser_id(),List.class);
             List<Map<String,Object>> artiAndCounts = new ArrayList<>();
             for(int j = 0;j<artis.size();j++){
                 Map<String,Object> artiAndCountMap = new HashMap<>();
-                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(j).get("arti_id"), Map.class);
+                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?artiId="+artis.get(j).get("arti_id"), Map.class);
                 artiAndCountMap.put("count",Integer.parseInt(count.get("").toString()));
                 artiAndCountMap.put("arti",artis.get(j));
                 artiAndCounts.add(artiAndCountMap);
             }
-            map.put("user",user);
-            map.put("artis",artiAndCounts);
-            infos.add(map);
+            info.put("user",user);
+            info.put("artis",artiAndCounts);
+            infos.add(info);
         }
         modelMap.put("infos",infos);
         modelMap.put("user",user);
@@ -68,20 +65,20 @@ public class FollowController {
         List<Map<String,Object>> infos = new ArrayList<>();
 
         for(int i = 0;i<fols.size();i++){
-            Map<String,Object> map = new HashMap<>();
+            Map<String,Object> info = new HashMap<>();
             user = restTemplate.getForObject("http://user-provider/getUserInfo?user_id=" + fols.get(i).get("follow_user_id"), Users.class);
             List<Map<String,Object>> artis = restTemplate.getForObject("http://arti-provider/getHotArtiInSingleUser?user_id="+user.getUser_id(),List.class);
             List<Map<String,Object>> artiAndCounts = new ArrayList<>();
             for(int j = 0;j<artis.size();j++){
                 Map<String,Object> artiAndCountMap = new HashMap<>();
-                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?arti_id="+artis.get(j).get("arti_id"), Map.class);
+                Map<String,Object> count = restTemplate.getForObject("http://comment-provider/countComment?artiId="+artis.get(j).get("arti_id"), Map.class);
                 artiAndCountMap.put("count",Integer.parseInt(count.get("").toString()));
                 artiAndCountMap.put("arti",artis.get(j));
                 artiAndCounts.add(artiAndCountMap);
             }
-            map.put("user",user);
-            map.put("artis",artiAndCounts);
-            infos.add(map);
+            info.put("user",user);
+            info.put("artis",artiAndCounts);
+            infos.add(info);
         }
         modelMap.put("infos",infos);
         modelMap.put("user",user);

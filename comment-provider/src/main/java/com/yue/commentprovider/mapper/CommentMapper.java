@@ -23,7 +23,7 @@ public interface CommentMapper {
 
     void addIntoComm_Comm(Map<String, Object> map);
 
-    List<Comment> getCommentByArtiId(int arti_id);
+    List<Comment> getCommentByArtiId(int artiId);
 
     Users getCommentUserInfo(int comm_id);
 
@@ -32,4 +32,6 @@ public interface CommentMapper {
     List<Comment> getHotComment();
 
     int countComment(int arti_id);
+
+    List<Comment> getReplyComment(int commId);
 }

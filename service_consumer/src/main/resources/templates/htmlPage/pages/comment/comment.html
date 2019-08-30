@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>comment</title>
+</head>
+	<body>
+		<div class="container" th:fragment="comment">
+			[[${commInfos.comm.comm_cont}]]
+<!--			<div class="media">-->
+<!--				<div class="media-left">-->
+<!--					<a th:href="@{'javascript:getArticleByUserId('+${commInfos.user.user_id}+')'}">-->
+<!--						<img src="..." alt="暂无图片">-->
+<!--						<span class="label label-default">评论：[[${commInfos.user.user_name}]]</span>-->
+<!--					</a>-->
+<!--				</div>-->
+<!--				<div class="media-body">-->
+<!--					<a th:href="@{'javascript:getReplyComment('+${commInfos.comm.comm_id}+');'}" tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" -->
+<!--					data-trigger="focus" title="评论区"  data-html="true"-->
+<!--					id="commPopovers">-->
+<!--						[[${commInfos.comm.comm_cont}]] ，查看评论-->
+<!--					</a>-->
+<!--				</div>-->
+<!--			</div>-->
+		</div>
+	</body>
+</html>

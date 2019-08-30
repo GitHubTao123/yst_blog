@@ -3,15 +3,15 @@
 
 <mapper namespace="com.yue.artiprovider.mapper.ArticleMapper">
     <select id="getArticleByUserId" parameterType="int" resultMap="artiInfo">
-        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time from article where user_id = #{user_id}
+        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time,sign_city from article where user_id = #{userId}
     </select>
 
     <select id="getHotArtiInSingleUser" parameterType="int" resultMap="artiInfo">
-        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time from article where user_id = #{user_id} order by watched_times limit 3
+        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time,sign_city from article where user_id = #{user_id} order by watched_times limit 3
     </select>
 
     <select id="getArticleByArtiId" parameterType="int" resultMap="artiInfo">
-        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time from article where arti_id = #{arti_id}
+        select arti_id,user_id,arti_title,arti_cont,watched_times,create_time,sign_city from article where arti_id = #{artiId}
     </select>
 
     <select id="getHotArti" resultMap="artiInfo">
@@ -31,8 +31,8 @@
     </select>
 
     <insert id="submitArti" parameterType="com.yue.artiprovider.entity.Article">
-        insert into article (user_id,arti_title,arti_cont) values
-        (#{user_id},#{arti_title},#{m_textarea})
+        insert into article (user_id,arti_title,arti_cont,create_time,sign_city) values
+        (#{user_id},#{arti_title},#{arti_cont},#{create_time},#{sign_city})
     </insert>
 
     <insert id="addFollowArti" parameterType="com.yue.artiprovider.entity.Followed_arti">
@@ -63,6 +63,7 @@
         <result column="arti_cont" property="arti_cont" javaType="String"></result>
         <result column="watched_times" property="watched_times" javaType="int"></result>
         <result column="create_time" property="create_time"></result>
+        <result column="sign_city" property="sign_city"></result>
     </resultMap>
 
     <resultMap id="followArtiInfo" type="com.yue.artiprovider.entity.Followed_arti" autoMapping="true">

@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface ArticleMapper {
-    List<Article> getArticleByUserId(@Param("user_id") int user_id);
+    List<Article> getArticleByUserId(@Param("userId") int userId);
 
-    void submitArti(int user_id, String arti_title, String m_textarea);
+    void submitArti(Article article);
 
     void modiArti(int arti_id, String arti_title, String arti_cont);
 
-    Article getArticleByArtiId(int arti_id);
+    Article getArticleByArtiId(int artiId);
 
     void update_watch_times(int watched_times, int arti_id);
 
